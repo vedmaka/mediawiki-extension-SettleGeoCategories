@@ -1,0 +1,114 @@
+<?php
+
+/**
+ * SettleGeoCategories SpecialPage for SettleGeoCategories extension
+ *
+ * @file
+ * @ingroup Extensions
+ */
+class SpecialSettleGeoCategories extends SpecialPage
+{
+    public function __construct()
+    {
+        parent::__construct( 'SettleGeoCategories' );
+    }
+
+    /**
+     * Show the page to the user
+     *
+     * @param string $sub The subpage string argument (if any).
+     *  [[Special:SettleGeoCategories/subpage]].
+     */
+    public function execute( $sub )
+    {
+
+	    $out = $this->getOutput();
+
+    	if( $this->getRequest()->wasPosted() ) {
+
+    		$title = $this->getRequest()->getVal('title_key');
+    		$parent = $this->getRequest()->getVal('parent');
+
+    		$category = new SettleGeoCategory();
+    		$category->setTitleKey($title);
+    		$category->setDescription('');
+    		$category->setImage('');
+    		$category->setGeoScope( SettleGeoCategories::GEO_SCOPE_DEFAULT );
+
+    		if( !empty($parent) && $parent ) {
+				$category->setParentId( $parent );
+		    }
+
+		    $category->save();
+
+    		$out->addHTML('New category was added: '.$category->getId());
+
+	    }
+
+	    $categories = SettleGeoCategories::getAllCategories();
+
+        $out->setPageTitle('Geo binding categories test page');
+        $out->setHTMLTitle('Geo binding categories test page');
+
+        $out->addHTML('<form method="post">');
+        $out->addHTML('Title:<input type="text" name="title_key" value="" />');
+        $out->addHTML('Parent:<select name="parent">');
+            $out->addHTML('<option value="">-</option>');
+		    foreach ( $categories as $category ) {
+			    $out->addHTML( $this->displayCategoryRecursiveInput($category) );
+		    }
+        $out->addHTML('</select>');
+	    $out->addHTML('<input type="submit" />');
+        $out->addHTML('</form>');
+
+        $out->addHTML('<h2>Categories:</h2>');
+
+		foreach ( $categories as $category ) {
+		    $out->addHTML( $this->displayCategoryRecursive($category) );
+		}
+
+    }
+
+	/**
+	 * @param SettleGeoCategory $category
+	 *
+	 * @param string            $prefix
+	 *
+	 * @return string
+	 */
+	private function displayCategoryRecursiveInput( $category, $prefix = '' )
+	{
+		$html = '';
+		$html .= '<option value="'.$category->getId().'">'.$prefix.' '.$category->getTitleKey().'</option>';
+		if( $category->getChildren() ) {
+			foreach ( $category->getChildren() as $child ) {
+				$html .= $this->displayCategoryRecursiveInput( $child, $prefix.'--' );
+			}
+		}
+		return $html;
+	}
+
+	/**
+	 * @param SettleGeoCategory $category
+	 *
+	 * @return string
+	 */
+    private function displayCategoryRecursive( $category, $tagWrap = 'ul', $tagList = 'li' )
+    {
+    	$html = '';
+    	$html .= '<'.$tagWrap.'>';
+    	    $html .= '<'.$tagList.'>'.$category->getTitleKey().'</'.$tagList.'>';
+    	    if( $category->getChildren() ) {
+    	    	foreach ( $category->getChildren() as $child ) {
+					$html .= $this->displayCategoryRecursive( $child );
+		        }
+	        }
+    	$html .= '</'.$tagWrap.'>';
+    	return $html;
+    }
+
+    protected function getGroupName()
+    {
+        return 'other';
+    }
+}
