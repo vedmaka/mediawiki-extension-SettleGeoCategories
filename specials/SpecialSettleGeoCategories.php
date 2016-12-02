@@ -28,6 +28,7 @@ class SpecialSettleGeoCategories extends SpecialPage
 
     		$title = $this->getRequest()->getVal('title_key');
     		$parent = $this->getRequest()->getVal('parent');
+    		$geo = $this->getRequest()->getVal('geo_scope');
 
     		$category = new SettleGeoCategory();
     		$category->setTitleKey($title);
@@ -37,6 +38,10 @@ class SpecialSettleGeoCategories extends SpecialPage
 
     		if( !empty($parent) && $parent ) {
 				$category->setParentId( $parent );
+		    }
+		    
+		    if( !empty($geo) && $geo != null ) {
+		    	$category->setGeoScope($geo);
 		    }
 
 		    $category->save();
@@ -58,6 +63,12 @@ class SpecialSettleGeoCategories extends SpecialPage
 			    $out->addHTML( $this->displayCategoryRecursiveInput($category) );
 		    }
         $out->addHTML('</select>');
+	    $out->addHTML('<select name="geo_scope">');
+	    	$out->addHTML('<option value="'.SettleGeoCategories::GEO_SCOPE_DEFAULT.'">default</option>');
+	    	$out->addHTML('<option value="'.SettleGeoCategories::GEO_SCOPE_COUNTRY.'">country</option>');
+	    	$out->addHTML('<option value="'.SettleGeoCategories::GEO_SCOPE_STATE.'">state</option>');
+	    	$out->addHTML('<option value="'.SettleGeoCategories::GEO_SCOPE_CITY.'">city</option>');
+	    $out->addHTML('</select>');
 	    $out->addHTML('<input type="submit" />');
         $out->addHTML('</form>');
 
@@ -97,7 +108,7 @@ class SpecialSettleGeoCategories extends SpecialPage
     {
     	$html = '';
     	$html .= '<'.$tagWrap.'>';
-    	    $html .= '<'.$tagList.'>'.$category->getTitleKey().'</'.$tagList.'>';
+    	    $html .= '<'.$tagList.'>'.$category->getTitleKey().' ('.$category->getId().') ['.$category->getGeoScope().']</'.$tagList.'>';
     	    if( $category->getChildren() ) {
     	    	foreach ( $category->getChildren() as $child ) {
 					$html .= $this->displayCategoryRecursive( $child );

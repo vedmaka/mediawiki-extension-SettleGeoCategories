@@ -38,6 +38,19 @@ class SettleGeoCategory {
 			$this->loadFromDatabase( $id );
 		}
 	}
+	
+	/**
+	 * @param string $title_key
+	 * @return null|SettleGeoCategory
+	 */
+	public static function newFromTitleKey( $title_key ) {
+		$dbr = wfGetDB(DB_SLAVE);
+		$row = $dbr->selectRow( self::$table, 'id', array('title_key' => trim($title_key)) );
+		if( $row ) {
+			return new self($row->id);
+		}
+		return null;
+	}
 
 	private function loadFromDatabase($id) {
 		$dbr = wfGetDB(DB_SLAVE);
@@ -133,35 +146,35 @@ class SettleGeoCategory {
 	/**
 	 * @param string $title_key
 	 */
-	public function setTitleKey( string $title_key ) {
+	public function setTitleKey( $title_key ) {
 		$this->title_key = $title_key;
 	}
 
 	/**
 	 * @param int $geo_scope
 	 */
-	public function setGeoScope( int $geo_scope ) {
+	public function setGeoScope( $geo_scope ) {
 		$this->geo_scope = $geo_scope;
 	}
 
 	/**
 	 * @param string $description
 	 */
-	public function setDescription( string $description ) {
+	public function setDescription( $description ) {
 		$this->description = $description;
 	}
 
 	/**
 	 * @param string $image
 	 */
-	public function setImage( string $image ) {
+	public function setImage( $image ) {
 		$this->image = $image;
 	}
 
 	/**
 	 * @param SettleGeoCategory[] $children
 	 */
-	public function setChildren( array $children ) {
+	public function setChildren( $children ) {
 		$this->children = $children;
 	}
 
