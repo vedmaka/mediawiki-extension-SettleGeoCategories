@@ -58,9 +58,11 @@ $(function(){
 		var $form = $('#settle-category-properties');
 		var $title = $form.find('input[name="category_name"]');
 		var $scope = $form.find('select[name="category_scope"]');
+		var $cid = $form.find('input[name="category_id"]');
 
 		$title.val( '' );
 		$scope.val( '' );
+		$cid.val('');
 	}
 
 	function loadNodeIntoEditor( node )
@@ -68,9 +70,11 @@ $(function(){
 		var $form = $('#settle-category-properties');
 		var $title = $form.find('input[name="category_name"]');
 		var $scope = $form.find('select[name="category_scope"]');
+		var $cid = $form.find('input[name="category_id"]');
 
 		$title.val( node.text );
 		$scope.val( node.original.scope );
+		$cid.val( node.id );
 
 	}
 

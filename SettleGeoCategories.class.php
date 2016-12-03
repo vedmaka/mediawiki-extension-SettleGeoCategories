@@ -57,7 +57,7 @@ class SettleGeoCategories
 	}
 
 	/**
-	 * Parser function that adds categories to the page using their titles
+	 * Parser function that adds categories to the page using their ids
 	 * 
 	 * @param Parser $parser
 	 * @param $frame
@@ -77,11 +77,21 @@ class SettleGeoCategories
 		$car = array();
 		self::clearPageCategories( $parser->getTitle() );
 		foreach ($categories_ids as $cid) {
-			$cat = SettleGeoCategory::newFromTitleKey( $cid );
-			if( !$cat || $cat === null ) {
+			//$cat = SettleGeoCategory::newFromTitleKey( $cid );
+			//if( !$cat || $cat === null ) {
+			//	continue;
+			//}
+			if( $cid === null || $cid == '' ) {
 				continue;
 			}
-			self::addPageToCategory( $parser->getTitle(), $cat->getId() );
+			
+			$cat = new SettleGeoCategory($cid);
+			if( !$cat || $cat->getId() === null ) {
+				continue;
+			}
+			
+			self::addPageToCategory( $parser->getTitle(), $cid );
+			
 			$car[] = $cat->getTitleKey();
 		}
 		return implode(',', $car);

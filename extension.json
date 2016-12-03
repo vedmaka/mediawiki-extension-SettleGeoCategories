@@ -13,7 +13,8 @@
 		"SettleGeoCategoriesHooks": "SettleGeoCategories.hooks.php",
 		"SpecialSettleGeoCategories": "specials/SpecialSettleGeoCategories.php",
 		"SettleGeoCategory": "includes/SettleGeoCategory.php",
-		"SettleGeoCategoriesApi": "includes/SettleGeoCategoriesApi.php"
+		"SettleGeoCategoriesApi": "includes/SettleGeoCategoriesApi.php",
+		"SettleGeoCategoryInput": "includes/SettleGeoCategoryInput.php"
 	},
 	"config": {
 		"SettleGeoCategoriesEnableFoo": true
@@ -35,7 +36,13 @@
         ],
         "ParserFirstCallInit": [
             "SettleGeoCategoriesHooks::onParserFirstCallInit"
-        ]
+        ],
+        "SMWStore::updateDataBefore": [
+        	"SettleGeoCategoriesHooks::updateDataBefore"
+    	],
+    	"sfFormPrinterSetup": [
+			"SettleGeoCategoriesHooks::sfFormPrinterSetup"
+		]
 	},
 	"MessagesDirs": {
 		"SettleGeoCategories": [

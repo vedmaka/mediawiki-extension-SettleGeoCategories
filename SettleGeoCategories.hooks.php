@@ -19,9 +19,6 @@ class SettleGeoCategoriesHooks
 		
 	}
 
-	/**
-	 * @param DatabaseUpdater $updater
-	 */
 	public static function onLoadExtensionSchemaUpdates( $updater )
 	{
 		$updater->addExtensionTable('settlegeocategories', dirname(__FILE__).'/schema/settlegeocategories.sql');
@@ -34,12 +31,27 @@ class SettleGeoCategoriesHooks
 		return true;
 	}
 
-	/**
-	 * @param Parser $parser
-	 */
 	public static function onParserFirstCallInit( $parser )
 	{
 		$parser->setFunctionHook('settlecategories', 'SettleGeoCategories::tag', SFH_OBJECT_ARGS);
+	}
+	
+	public static function updateDataBefore( $store, $semanticData )
+	{
+		if( !$semanticData ) {
+			return true;
+		}
+		
+		// TODO: to be implemented
+		// https://github.com/SemanticMediaWiki/SemanticExtraSpecialProperties/blob/master/src/Annotator/ExtraPropertyAnnotator.php
+		//$di = new SMWDIBlob('Test12345');
+		//$semanticData->addPropertyValue( 'Category', $di );
+	}
+	
+	public static function sfFormPrinterSetup( $formPrinter )
+	{
+		$formPrinter->registerInputType('SettleGeoCategoryInput');
+		return true;
 	}
 
 }
