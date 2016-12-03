@@ -1,3 +1,59 @@
-.mw-settlegeocategories-foo {
-    float: left;
+#settle-categories-tree {
+    margin: 20px 0;
+    outline: none;
+}
+
+#loading-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.45);
+    color: white;
+    text-align: center;
+    display: none;
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+}
+
+#tree-wrapper {
+    position: relative;
+}
+
+#settle-categories-tree li[flag-scope="0"] > a::after {
+    content: "country";
+    display: inline-block;
+    padding: 0 4px;
+    background-color: rgba(105, 105, 105, 0.38);
+    color: white;
+    margin-left: 4px;
+    border-radius: 2px;
+    line-height: 14px;
+    font-size: 12px;
+}
+
+#settle-categories-tree li[flag-scope="1"] > a::after {
+    content: "state";
+    display: inline-block;
+    padding: 0 4px;
+    background-color: rgba(105, 105, 105, 0.38);
+    color: white;
+    margin-left: 4px;
+    border-radius: 2px;
+    line-height: 14px;
+    font-size: 12px;
+}
+
+#settle-categories-tree li[flag-scope="2"] > a::after {
+    content: "city";
+    display: inline-block;
+    padding: 0 4px;
+    background-color: rgba(105, 105, 105, 0.38);
+    color: white;
+    margin-left: 4px;
+    border-radius: 2px;
+    line-height: 14px;
+    font-size: 12px;
 }

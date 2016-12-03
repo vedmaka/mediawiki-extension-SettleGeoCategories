@@ -75,6 +75,32 @@ class SettleGeoCategory {
 		}
 	}
 
+	public function delete() {
+		$this->internalDelete();
+	}
+
+	private function internalDelete() {
+		if( $this->id === null ) {
+			return false;
+		}
+
+		$dbw = wfGetDB(DB_MASTER);
+
+		if( count($this->children) ) {
+			foreach ($this->children as $child) {
+				$child->delete();
+			}
+		}
+
+		// Delete self
+		$dbw->delete(
+			self::$table,
+			array( 'id' => $this->id )
+		);
+
+		return true;
+	}
+
 	public function save() {
 		$this->internalSave();
 	}
@@ -92,6 +118,16 @@ class SettleGeoCategory {
 			) );
 			$id       = $dbw->insertId();
 			$this->id = $id;
+		}else{
+			$dbw->update( self::$table, array(
+				'title_key'   => $this->title_key,
+				'geo_scope'   => $this->geo_scope,
+				'description' => $this->description,
+				'image'       => $this->image,
+				'parent_id'   => ( $this->parent_id !== null) ? $this->parent_id : null
+			), array(
+				'id' => $this->id
+			));
 		}
 		if( count($this->children) ) {
 			foreach ($this->children as $child) {

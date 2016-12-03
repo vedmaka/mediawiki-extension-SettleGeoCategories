@@ -12,7 +12,8 @@
         "SettleGeoCategories": "SettleGeoCategories.class.php",
 		"SettleGeoCategoriesHooks": "SettleGeoCategories.hooks.php",
 		"SpecialSettleGeoCategories": "specials/SpecialSettleGeoCategories.php",
-		"SettleGeoCategory": "includes/SettleGeoCategory.php"
+		"SettleGeoCategory": "includes/SettleGeoCategory.php",
+		"SettleGeoCategoriesApi": "includes/SettleGeoCategoriesApi.php"
 	},
 	"config": {
 		"SettleGeoCategoriesEnableFoo": true
@@ -42,11 +43,13 @@
 		]
 	},
 	"ResourceModules": {
-		"ext.settlegeocategories.foo": {
+		"ext.settlegeocategories.special": {
 			"scripts": [
+				"modules/jstree.min.js",
 				"modules/ext.SettleGeoCategories.foo.js"
 			],
 			"styles": [
+				"modules/themes/default/style.css",
 				"modules/ext.SettleGeoCategories.foo.css"
 			]
 		}
@@ -57,5 +60,14 @@
 	},
 	"SpecialPages": {
 		"SettleGeoCategories": "SpecialSettleGeoCategories"
+	},
+	"APIModules": {
+		"settlecategories": "SettleGeoCategoriesApi"
+	},
+	"AvailableRights": ["geocategories"],
+	"GroupPermissions": {
+		"sysop": {
+            "geocategories": true
+        }
 	}
 }

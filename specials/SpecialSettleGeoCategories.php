@@ -22,9 +22,20 @@ class SpecialSettleGeoCategories extends SpecialPage
     public function execute( $sub )
     {
 
-	    $out = $this->getOutput();
+    	if( !$this->getUser()->isAllowed('geocategories') ) {
+    		$this->displayRestrictionError();
+	    }
 
-    	if( $this->getRequest()->wasPosted() ) {
+	    $out = $this->getOutput();
+	    $out->addModules('ext.settlegeocategories.special');
+
+	    $out->setPageTitle('Geographical categories');
+
+	    $data = array();
+	    $templater = new TemplateParser( dirname(__FILE__) .'/../templates/' );
+	    $out->addHTML( $templater->processTemplate('default', $data) );
+
+    	/*if( $this->getRequest()->wasPosted() ) {
 
     		$title = $this->getRequest()->getVal('title_key');
     		$parent = $this->getRequest()->getVal('parent');
@@ -76,7 +87,7 @@ class SpecialSettleGeoCategories extends SpecialPage
 
 		foreach ( $categories as $category ) {
 		    $out->addHTML( $this->displayCategoryRecursive($category) );
-		}
+		}*/
 
     }
 
