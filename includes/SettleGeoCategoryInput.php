@@ -54,12 +54,19 @@ class SettleGeoCategoryInput extends SFDropdownInput {
 		$text = Html::rawElement( 'span', array( 'class' => $spanClass ), $text );
 		return $text;
 	}
-	
+
+	/**
+	 * @param SettleGeoCategory $category
+	 * @param string $prefix
+	 * @param string $cur_value
+	 *
+	 * @return string
+	 */
 	public static function displayCategoryRecursiveInput( $category, $prefix = '', $cur_value )
 	{
 		$html = '';
 		$selected = '';
-		if ( $cur_value == $cur_value ) {
+		if ( $cur_value == $category->getId() ) {
 				$selected = "selected";
 		}
 		$html .= '<option '.$selected.' value="'.$category->getId().'">'.$prefix.' '.$category->getTitleKey().'</option>';

@@ -42,6 +42,23 @@ class SettleGeoCategories
 
 	/**
 	 * @param Title $title
+	 *
+	 * @return array
+	 */
+	public static function getPageCategories( $title ) {
+		$dbr = wfGetDB(DB_SLAVE);
+		$result = $dbr->select( self::$table, 'id_to', array('id_from' => $title->getArticleID()) );
+		$categories = array();
+		if( $result ) {
+			while( $row = $result->fetchRow() ) {
+				$categories[] = new SettleGeoCategory( $row['id_to'] );
+			}
+		}
+		return $categories;
+	}
+
+	/**
+	 * @param Title $title
 	 * @param int $category_id
 	 */
 	public static function addPageToCategory( $title, $category_id ) {
@@ -66,6 +83,14 @@ class SettleGeoCategories
 	 * @return bool|string
 	 */
 	public static function tag( $parser, $frame, $args ) {
+
+		if( !$parser->getTitle() || !$parser->getTitle()->exists() ) {
+			return true;
+		}
+
+		// Clear out all categories from the page
+		self::clearPageCategories( $parser->getTitle() );
+
 		if( !count($args) ) {
 			return false;
 		}
@@ -75,13 +100,12 @@ class SettleGeoCategories
 			return false;
 		}
 		$car = array();
-		self::clearPageCategories( $parser->getTitle() );
 		foreach ($categories_ids as $cid) {
 			//$cat = SettleGeoCategory::newFromTitleKey( $cid );
 			//if( !$cat || $cat === null ) {
 			//	continue;
 			//}
-			if( $cid === null || $cid == '' ) {
+			if( $cid === null ) {
 				continue;
 			}
 			
@@ -94,6 +118,8 @@ class SettleGeoCategories
 			
 			$car[] = $cat->getTitleKey();
 		}
+
+		// Print out categories names
 		return implode(',', $car);
 	}
 

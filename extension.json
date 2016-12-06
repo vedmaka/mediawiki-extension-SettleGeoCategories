@@ -42,6 +42,9 @@
     	],
     	"sfFormPrinterSetup": [
 			"SettleGeoCategoriesHooks::sfFormPrinterSetup"
+		],
+		"SMW::Property::initProperties": [
+			"SettleGeoCategoriesHooks::initProperties"
 		]
 	},
 	"MessagesDirs": {

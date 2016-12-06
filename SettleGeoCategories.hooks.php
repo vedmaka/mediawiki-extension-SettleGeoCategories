@@ -35,17 +35,53 @@ class SettleGeoCategoriesHooks
 	{
 		$parser->setFunctionHook('settlecategories', 'SettleGeoCategories::tag', SFH_OBJECT_ARGS);
 	}
-	
+
+	/**
+	 * @param \SMW\PropertyRegistry $registry
+	 */
+	public static function initProperties( $registry )
+	{
+		$registry->registerProperty('___GCT', '_txt', 'Geocategory', true, true );
+		$registry->registerProperty('___GCTID', '_num', 'GeocategoryId', true, true );
+	}
+
+	/**
+	 * @param SMWSQLStore3 $store
+	 * @param \SMW\SemanticData $semanticData
+	 *
+	 * @return bool
+	 */
 	public static function updateDataBefore( $store, $semanticData )
 	{
 		if( !$semanticData ) {
 			return true;
 		}
-		
-		// TODO: to be implemented
+
+		$title = $semanticData->getSubject()->getTitle();
+		if( !$title || !$title->exists() ) {
+			return true;
+		}
+
+		$categories = SettleGeoCategories::getPageCategories( $title );
+		if( !$categories || !count($categories) ) {
+			return true;
+		}
+
+		/** @var SettleGeoCategory $category */
+		foreach ( $categories as $category ) {
+
+			$propertyDI = new \SMW\DIProperty( '___GCT' );
+			$dataItem  = new SMWDIString( $category->getTitleKey() );
+			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+
+			$propertyDI = new \SMW\DIProperty( '___GCTID' );
+			$dataItem = new SMWDINumber( $category->getId() );
+			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+
+		}
+
 		// https://github.com/SemanticMediaWiki/SemanticExtraSpecialProperties/blob/master/src/Annotator/ExtraPropertyAnnotator.php
-		//$di = new SMWDIBlob('Test12345');
-		//$semanticData->addPropertyValue( 'Category', $di );
+
 	}
 	
 	public static function sfFormPrinterSetup( $formPrinter )
