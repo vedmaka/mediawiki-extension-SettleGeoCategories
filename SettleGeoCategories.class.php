@@ -105,7 +105,7 @@ class SettleGeoCategories
 			//if( !$cat || $cat === null ) {
 			//	continue;
 			//}
-			if( $cid === null ) {
+			if( $cid === null || $cid == "" ) {
 				continue;
 			}
 			

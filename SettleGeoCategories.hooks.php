@@ -41,8 +41,12 @@ class SettleGeoCategoriesHooks
 	 */
 	public static function initProperties( $registry )
 	{
+		// Category name
 		$registry->registerProperty('___GCT', '_txt', 'Geocategory', true, true );
+		// Category ID
 		$registry->registerProperty('___GCTID', '_num', 'GeocategoryId', true, true );
+		// Category Scope
+		$registry->registerProperty('___GCTSC', '_num', 'GeocategoryScope', true, true );
 	}
 
 	/**
@@ -70,12 +74,19 @@ class SettleGeoCategoriesHooks
 		/** @var SettleGeoCategory $category */
 		foreach ( $categories as $category ) {
 
+			// Category name
 			$propertyDI = new \SMW\DIProperty( '___GCT' );
 			$dataItem  = new SMWDIString( $category->getTitleKey() );
 			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
 
+			// Category ID
 			$propertyDI = new \SMW\DIProperty( '___GCTID' );
 			$dataItem = new SMWDINumber( $category->getId() );
+			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
+
+			// Category Scope
+			$propertyDI = new \SMW\DIProperty( '___GCTSC' );
+			$dataItem = new SMWDINumber( $category->getGeoScope() );
 			$semanticData->addPropertyObjectValue( $propertyDI, $dataItem );
 
 		}
