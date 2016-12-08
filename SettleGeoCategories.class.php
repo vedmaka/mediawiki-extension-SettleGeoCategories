@@ -51,7 +51,11 @@ class SettleGeoCategories
 		$categories = array();
 		if( $result ) {
 			while( $row = $result->fetchRow() ) {
-				$categories[] = new SettleGeoCategory( $row['id_to'] );
+				try {
+					$categories[] = new SettleGeoCategory( $row['id_to'] );
+				}catch (Exception $e) {
+					continue;
+				}
 			}
 		}
 		return $categories;
@@ -108,8 +112,13 @@ class SettleGeoCategories
 			if( $cid === null || $cid == "" ) {
 				continue;
 			}
-			
-			$cat = new SettleGeoCategory($cid);
+
+			try {
+				$cat = new SettleGeoCategory( $cid );
+			}catch (Exception $e) {
+				continue;
+			}
+
 			if( !$cat || $cat->getId() === null ) {
 				continue;
 			}
