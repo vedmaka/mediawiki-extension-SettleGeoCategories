@@ -9,7 +9,7 @@
 class SettleGeoCategories
 {
 
-	const GEO_SCOPE_DEFAULT     = 0; //TODO: remove
+	const GEO_SCOPE_DEFAULT     = 2; //TODO: remove
 	const GEO_SCOPE_COUNTRY     = 0;
 	const GEO_SCOPE_STATE       = 1;
 	const GEO_SCOPE_CITY        = 2;
