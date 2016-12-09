@@ -15,18 +15,34 @@ $(function(){
 		}
 
 		var scope = $(this).find('option:selected').data('scope');
+		$msg.html( getMsgScope(scope) );
+
+	});
+
+	if( $input.val() && $input.val().length && $input.find('option:selected').length ) {
+		var scope = $input.find('option:selected').data('scope');
+		$msg.html( getMsgScope(scope) );
+	}
+
+	function getMsgScope( scope ) {
+
 		switch (scope) {
 			case 0:
-				$msg.html('This category is <b>country</b>-wide.');
+				return 'This category is <b>country</b>-wide.';
 				break;
 			case 1:
-				$msg.html('This category is <b>state</b>-wide.');
+				return 'This category is <b>state</b>-wide.';
 				break;
 			case 2:
-				$msg.html('');
+				return '';
+				break;
+			default:
+				return '';
 				break;
 		}
 
-	});
+		return '';
+
+	}
 
 });
