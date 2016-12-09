@@ -62,6 +62,14 @@
 				"modules/themes/default/style.css",
 				"modules/ext.SettleGeoCategories.foo.css"
 			]
+		},
+		"ext.settlegeocategories.input": {
+			"scripts": [
+				"modules/ext.SettleGeoCategories.input.js"
+			],
+			"styles": [
+				"modules/ext.SettleGeoCategories.input.css"
+			]
 		}
 	},
 	"ResourceFileModulePaths": {

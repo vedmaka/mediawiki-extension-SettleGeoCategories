@@ -7,7 +7,11 @@ class SettleGeoCategoryInput extends SFDropdownInput {
 	}
 	
 	public static function getHTML( $cur_value, $input_name, $is_mandatory, $is_disabled, $other_args ) {
-		global $sfgTabIndex, $sfgFieldNum, $sfgShowOnSelect;
+		global $sfgTabIndex, $sfgFieldNum, $sfgShowOnSelect, $wgOut;
+
+		if( !in_array( 'ext.settlegeocategories.input', $wgOut->getModules()) ) {
+			$wgOut->addModules( 'ext.settlegeocategories.input' );
+		}
 
 		// Standardize $cur_value
 		if ( is_null( $cur_value ) ) { $cur_value = ''; }
@@ -47,10 +51,16 @@ class SettleGeoCategoryInput extends SFDropdownInput {
 			$selectAttrs['origname'] = $other_args['origName'];
 		}
 		$text = Html::rawElement( 'select', $selectAttrs, $innerDropdown );
-		$spanClass = 'inputSpan';
+		$spanClass = 'inputSpan settlecategories-dropdown-span';
 		if ( $is_mandatory ) {
 			$spanClass .= ' mandatoryFieldSpan';
 		}
+		if( $cur_value === '' ) {
+			$text .= '<span class="category-input-text-description">Please select a category.</span>';
+		}else{
+			$text .= '<span class="category-input-text-description"></span>';
+		}
+
 		$text = Html::rawElement( 'span', array( 'class' => $spanClass ), $text );
 		return $text;
 	}
@@ -69,7 +79,7 @@ class SettleGeoCategoryInput extends SFDropdownInput {
 		if ( $cur_value == $category->getId() ) {
 				$selected = "selected";
 		}
-		$html .= '<option '.$selected.' value="'.$category->getId().'">'.$prefix.' '.$category->getTitleKey().'</option>';
+		$html .= '<option data-scope="'.$category->getGeoScope().'" '.$selected.' value="'.$category->getId().'">'.$prefix.' '.$category->getTitleKey().'</option>';
 		if( $category->getChildren() ) {
 			foreach ( $category->getChildren() as $child ) {
 				$html .= self::displayCategoryRecursiveInput( $child, $prefix.'--', $cur_value );
