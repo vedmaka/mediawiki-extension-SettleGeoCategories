@@ -78,6 +78,23 @@ class SettleGeoCategories
 	}
 
 	/**
+	 * @param int $category_id
+	 *
+	 * @return Title[]
+	 */
+	public static function getPagesInCategory( $category_id ) {
+		$pages = array();
+		$dbr = wfGetDB(DB_SLAVE);
+		$result = $dbr->select( self::$table, '*', array(
+			'id_to' => $category_id
+		));
+		while( $row = $result->fetchRow() ) {
+			$pages[] = Title::newFromID( $row['id_from'] );
+		}
+		return $pages;
+	}
+
+	/**
 	 * Parser function that adds categories to the page using their ids
 	 * 
 	 * @param Parser $parser

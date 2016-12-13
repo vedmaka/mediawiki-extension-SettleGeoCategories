@@ -1,0 +1,21 @@
+<h1>
+    {{ title }}
+</h1>
+<p>
+    {{ description }}
+</p>
+
+<div class="row">
+    <div class="col-md-6">
+
+    </div>
+    <div class="col-md-6">
+        <ul>
+            {{# pages }}
+                <li>
+                    <a href="{{ link }}">{{ title }}</a>
+                </li>
+            {{/ pages }}
+        </ul>
+    </div>
+</div>
