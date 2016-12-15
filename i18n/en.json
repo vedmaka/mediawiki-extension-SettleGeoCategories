@@ -3,5 +3,8 @@
     "authors": []
   },
   "settlegeocategories-desc": "This is an example extension",
-  "settlegeocategories-i18n-welcome": "Welcome to the localization file of the SettleGeoCategories extension."
+  "settlegeocategories-i18n-welcome": "Welcome to the localization file of the SettleGeoCategories extension.",
+  "settlegeocategories-scope-0": "country",
+  "settlegeocategories-scope-1": "state",
+  "settlegeocategories-scope-2": "city"
 }

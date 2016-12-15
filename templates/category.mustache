@@ -1,5 +1,6 @@
 <h1>
     {{ title }}
+    <small>{{ scope_text }}-wide</small>
 </h1>
 <p>
     {{ description }}
@@ -7,6 +8,14 @@
 
 <div class="row">
     <div class="col-md-6">
+        {{# parent }}
+            <h3>Parent category</h3>
+            <ul>
+                <li>
+                    <a href="{{ link }}">{{ title }}</a>
+                </li>
+            </ul>
+        {{/parent}}
         <h3>Sub-categories</h3>
         <ul>
             {{# subs }}

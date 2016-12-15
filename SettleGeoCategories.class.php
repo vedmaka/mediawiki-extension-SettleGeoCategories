@@ -115,11 +115,16 @@ class SettleGeoCategories
 		if( !count($args) ) {
 			return false;
 		}
+
 		$categories_ids = array_shift($args);
 		$categories_ids = explode(',', $categories_ids);
+
 		if( !count($categories_ids) ) {
 			return false;
 		}
+
+		$catLink = SpecialPage::getTitleFor('Category')->getFullURL();
+
 		$car = array();
 		foreach ($categories_ids as $cid) {
 			//$cat = SettleGeoCategory::newFromTitleKey( $cid );
@@ -142,11 +147,19 @@ class SettleGeoCategories
 			
 			self::addPageToCategory( $parser->getTitle(), $cid );
 			
-			$car[] = $cat->getTitleKey();
+			$car[$cid] = $cat->getTitleKey();
+		}
+
+		$html = '';
+		foreach ($car as $cK => $cV) {
+			$html .= $parser->insertStripItem( '<span class="label label-default"><a href="'.$catLink.'/'.$cK.'">'.$cV.'</a></span>' );
 		}
 
 		// Print out categories names
-		return implode(',', $car);
+		return array(
+			$html,
+			'markerType' => 'nowiki'
+		);
 	}
 
 }
