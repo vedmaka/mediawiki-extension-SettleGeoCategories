@@ -29,11 +29,20 @@ class SpecialSettleCategory extends UnlistedSpecialPage {
 				);
 			}
 
+			$subCategories = array();
+			foreach ( $category->getChildren() as $subCategory ) {
+				$subCategories[] = array(
+					'title' => $subCategory->getTitleKey(),
+					'link' => $this->getFullTitle()->getFullURL().'/'.$subCategory->getId()
+				);
+			}
+
 			$data = array(
 				'title' => $category->getTitleKey(),
 				'id' => $category->getId(),
 				'description' => $category->getDescription(),
-				'pages' => $mustachePages
+				'pages' => $mustachePages,
+				'subs' => $subCategories
 			);
 			$templater = new TemplateParser( dirname(__FILE__).'/../templates', true );
 			$this->getOutput()->addHTML( $templater->processTemplate('category', $data) );

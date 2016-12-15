@@ -7,9 +7,20 @@
 
 <div class="row">
     <div class="col-md-6">
-
+        <h3>Sub-categories</h3>
+        <ul>
+            {{# subs }}
+            <li>
+                <a href="{{ link }}">{{ title }}</a>
+            </li>
+            {{/subs}}
+            {{^ subs }}
+                <li>This category have no sub-categories.</li>
+            {{/subs}}
+        </ul>
     </div>
     <div class="col-md-6">
+        <h3>Pages in this category</h3>
         <ul>
             {{# pages }}
                 <li>
