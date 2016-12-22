@@ -15,7 +15,8 @@
 		"SettleGeoCategory": "includes/SettleGeoCategory.php",
 		"SettleGeoCategoriesApi": "includes/SettleGeoCategoriesApi.php",
 		"SettleGeoCategoryInput": "includes/SettleGeoCategoryInput.php",
-		"SpecialSettleCategory": "specials/SpecialCategory.php"
+		"SpecialSettleCategory": "specials/SpecialSettleCategory.php",
+		"SpecialSettleCategorySearch": "specials/SpecialSettleCategorySearch.php"
 	},
 	"config": {
 		"SettleGeoCategoriesEnableFoo": true
@@ -79,7 +80,8 @@
 	},
 	"SpecialPages": {
 		"SettleGeoCategories": "SpecialSettleGeoCategories",
-		"Category": "SpecialSettleCategory"
+		"Category": "SpecialSettleCategory",
+		"SettleCategorySearch": "SpecialSettleCategorySearch"
 	},
 	"APIModules": {
 		"settlecategories": "SettleGeoCategoriesApi"
