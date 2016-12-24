@@ -1,3 +1,24 @@
+<div id="country-search-wrapper">
+
 <p>
-    TODO: ..
+    Please select a country below.
 </p>
+
+<div class="row">
+
+    {{# countries }}
+    <div class="col-xs-6 col-md-3 country-outline-item">
+        <strong>{{ title }}</strong>
+        <ul>
+            {{# items }}
+            <li>
+                <a href="{{& url_prefix }}/{{ geonamesCode }}">{{ name }}</a>
+            </li>
+            {{/ items }}
+        </ul>
+    </div>
+    {{/ countries}}
+
+</div>
+
+</div>
