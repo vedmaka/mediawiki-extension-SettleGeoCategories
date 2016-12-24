@@ -98,13 +98,13 @@ class SpecialSettleGeoCategories extends SpecialPage
 	 *
 	 * @return string
 	 */
-	private function displayCategoryRecursiveInput( $category, $prefix = '' )
+	public static function displayCategoryRecursiveInput( $category, $prefix = '' )
 	{
 		$html = '';
 		$html .= '<option value="'.$category->getId().'">'.$prefix.' '.$category->getTitleKey().'</option>';
 		if( $category->getChildren() ) {
 			foreach ( $category->getChildren() as $child ) {
-				$html .= $this->displayCategoryRecursiveInput( $child, $prefix.'--' );
+				$html .= self::displayCategoryRecursiveInput( $child, $prefix.'--' );
 			}
 		}
 		return $html;
@@ -115,14 +115,14 @@ class SpecialSettleGeoCategories extends SpecialPage
 	 *
 	 * @return string
 	 */
-    private function displayCategoryRecursive( $category, $tagWrap = 'ul', $tagList = 'li' )
+	public static function displayCategoryRecursive( $category, $tagWrap = 'ul', $tagList = 'li' )
     {
     	$html = '';
     	$html .= '<'.$tagWrap.'>';
     	    $html .= '<'.$tagList.'>'.$category->getTitleKey().' ('.$category->getId().') ['.$category->getGeoScope().']</'.$tagList.'>';
     	    if( $category->getChildren() ) {
     	    	foreach ( $category->getChildren() as $child ) {
-					$html .= $this->displayCategoryRecursive( $child );
+					$html .= self::displayCategoryRecursive( $child );
 		        }
 	        }
     	$html .= '</'.$tagWrap.'>';

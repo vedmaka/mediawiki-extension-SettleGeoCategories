@@ -17,6 +17,7 @@ class SettleGeoCategories
 	static $table = 'settlegeocategories_links';
 
 	/**
+	 * Returns all top-level categories
 	 * @return SettleGeoCategory[]
 	 */
 	public static function getAllCategories() {

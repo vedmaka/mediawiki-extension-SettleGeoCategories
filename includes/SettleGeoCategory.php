@@ -138,6 +138,44 @@ class SettleGeoCategory {
 	}
 
 	/**
+	 * @param bool $includeSelf
+	 *
+	 * @return int[]
+	 */
+	public function recursiveIds( $includeSelf = true ) {
+
+		$ids = array();
+
+		if( $includeSelf ) {
+			$ids[] = $this->getId();
+		}
+
+		$ids = array_merge( $ids, $this->internalRecursiveIds( $this ) );
+
+		return $ids;
+
+	}
+
+	/**
+	 * @param SettleGeoCategory $category
+	 *
+	 * @return int[]
+	 */
+	private function internalRecursiveIds( $category ) {
+		$ids = array();
+
+		foreach ($category->getChildren() as $child) {
+			$ids[] = $child->getId();
+			if( $child->getChildren() ) {
+				$ids = array_merge( $ids, $this->internalRecursiveIds( $child ) );
+			}
+		}
+
+		return $ids;
+
+	}
+
+	/**
 	 * @return SettleGeoCategory[]
 	 */
 	public function getChildren() {
