@@ -137,6 +137,16 @@ class SettleGeoCategory {
 		}
 	}
 
+	public function countArticles() {
+
+		if( $this->id !== null ) {
+			return SettleGeoCategories::countPagesInCategory( $this->id );
+		}
+
+		return 0;
+
+	}
+
 	/**
 	 * @param bool $includeSelf
 	 *

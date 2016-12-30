@@ -34,11 +34,12 @@ class SettleGeoCategories
 	}
 
 	/**
-	 * @param Title $title
+	 * @param int $titleId
+	 *
 	 */
-	public static function clearPageCategories( $title ) {
+	public static function clearPageCategories( $titleId ) {
 		$dbw = wfGetDB(DB_MASTER);
-		$dbw->delete( self::$table, array('id_from' => $title->getArticleID()) );
+		$dbw->delete( self::$table, array('id_from' => $titleId) );
 	}
 
 	/**
@@ -95,6 +96,14 @@ class SettleGeoCategories
 		return $pages;
 	}
 
+	public static function countPagesInCategory( $category_id ) {
+		$dbr = wfGetDB(DB_SLAVE);
+		$count = $dbr->selectRowCount( self::$table, '*', array(
+				'id_to' => $category_id
+			));
+		return $count;
+	}
+
 	/**
 	 * Parser function that adds categories to the page using their ids
 	 * 
@@ -111,7 +120,7 @@ class SettleGeoCategories
 		}
 
 		// Clear out all categories from the page
-		self::clearPageCategories( $parser->getTitle() );
+		self::clearPageCategories( $parser->getTitle()->getArticleID() );
 
 		if( !count($args) ) {
 			return false;

@@ -101,4 +101,9 @@ class SettleGeoCategoriesHooks
 		return true;
 	}
 
+	public static function onArticleDeleteComplete( &$article, User &$user, $reason, $id, Content $content = null, LogEntry $logEntry )
+	{
+		SettleGeoCategories::clearPageCategories( $id );
+	}
+
 }

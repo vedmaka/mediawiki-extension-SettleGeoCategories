@@ -47,6 +47,9 @@
 		],
 		"SMW::Property::initProperties": [
 			"SettleGeoCategoriesHooks::initProperties"
+		],
+		"ArticleDeleteComplete": [
+			"SettleGeoCategoriesHooks::onArticleDeleteComplete"
 		]
 	},
 	"MessagesDirs": {

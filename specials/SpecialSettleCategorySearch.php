@@ -5,6 +5,8 @@ class SpecialSettleCategorySearch extends SpecialPage {
     /** @var TemplateParser */
 	private $templater;
 
+	private $topCategoriesIdsFlat;
+
 	public function __construct() {
 		parent::__construct( 'SettleCategorySearch', 'read' );
 	}
@@ -30,12 +32,23 @@ class SpecialSettleCategorySearch extends SpecialPage {
 			'categories' => array()
 		);
 
-	    // Fetch categories for pages within country
+		$country = null;
+		try {
+			$earth = new MenaraSolutions\Geographer\Earth();
+			$country = $earth->findOne( array('geonamesCode' => $path[0]) );
+			$country = $country->getShortName();
+		}catch (Exception $e) {
+			$country = '';
+		}
+
+		$data['country_text'] = $country;
+
+	    // Fetch categories for pages within a country
 		$query = SphinxStore::getInstance()->getQuery();
 
 		// Fetch list of all top-level categories
 		$topCategoriesIds = array();
-		$topCategoriesIdsFlat = array();
+		$this->topCategoriesIdsFlat = array();
 		$topCategories = SettleGeoCategories::getAllCategories();
 		// Pass all sub-categories ids from top-level category for easier building of Sphinx query
 		foreach ($topCategories as $topCategory) {
@@ -45,18 +58,18 @@ class SpecialSettleCategorySearch extends SpecialPage {
 				'deep_ids' => $topCategory->recursiveIds()
 			);
 			// TODO: is not very effective, but still possible to use
-			$sql = "SELECT id, IN( properties.geocategoryid, ".implode( ',', $item['deep_ids'] )." ) AS p FROM ".SphinxStore::getInstance()->getIndex()." WHERE p = 1;";
+			$sql = "SELECT id, ( IN( properties.geocodes, {$path[0]} ) AND IN( properties.geocategoryid, ".implode( ',', $item['deep_ids'] )." ) ) AS p FROM ".SphinxStore::getInstance()->getIndex()." WHERE p = 1;";
 			$result = $query->query( $sql )->execute();
 			if( $result->count() ) {
-				$topCategoriesIds[] = $item;
-				$topCategoriesIdsFlat = array_merge( $topCategoriesIdsFlat, $item['deep_ids'] );
+				$topCategoriesIds[] = $topCategory->getId();
+				$this->topCategoriesIdsFlat = array_merge( $this->topCategoriesIdsFlat, $item['deep_ids'] );
 			}
 		}
 
 		// Imported from SettleGeoSearch
 		// Fetch
 		$pl1 = ", (";
-		$pl1 .= "( IN( properties.geocodes, {$path[0]} ) ) AND properties.geocategory IS NOT NULL AND IN( properties.geocategoryid, ".implode(',', $topCategoriesIdsFlat)." )";
+		$pl1 .= "( IN( properties.geocodes, {$path[0]} ) ) AND properties.geocategory IS NOT NULL AND IN( properties.geocategoryid, ".implode(',', $topCategoriesIds)." )";
 		$pl1 .= " )";
 		$pl1 .= " AS p";
 		$pl2 = " WHERE p=1";
@@ -73,7 +86,6 @@ class SpecialSettleCategorySearch extends SpecialPage {
 
 				$properties = json_decode( $r['properties'], true );
 				$categories[ $properties['geocategoryid'][0] ] = $properties['geocategory'][0];
-
 			}
 		}
 
@@ -81,10 +93,6 @@ class SpecialSettleCategorySearch extends SpecialPage {
 
 		// Prepare for mustache
 		foreach ($categories as $id => $category) {
-			/*$data['categories'][] = array(
-				'id' => $id,
-				'title' => $category
-			);*/
 			$categories_html .= $this->displayCategoryRecursive( new SettleGeoCategory( $id ) );
 		}
 
@@ -144,29 +152,39 @@ class SpecialSettleCategorySearch extends SpecialPage {
 	 *
 	 * @return string
 	 */
-	private function displayCategoryRecursive( $category, $tagWrap = 'ul', $tagList = 'li' )
+	private function displayCategoryRecursive( $category )
 	{
 		$html = '';
-		$html .= '<'.$tagList.'><a href="#">'.$category->getTitleKey().'</a>';
+
+		// prepare data for Mustache template
+		$data = array(
+			'id' => $category->getId(),
+			'articles' => array(),
+			'title' => $category->getTitleKey(),
+			'url' => SpecialPage::getTitleFor('Category')->getFullURL().'/'.$category->getId(),
+			'innerHtml' => ''
+		);
 
 		$articles = SettleGeoCategories::getPagesInCategory( $category->getId() );
 		if( count($articles) ) {
-			$html .= '<ul>';
 			foreach ($articles as $article) {
-				$html .= '<li><a href="#">'.$article->getBaseText().'</a>';
+				$data['articles'][] = array(
+					'title' => $article->getBaseText(),
+					'url' => $article->getFullURL()
+				);
 			}
-			$html .= '</ul>';
 		}
 
 		if( $category->getChildren() ) {
-			$html .= '<'.$tagWrap.'>';
 			foreach ( $category->getChildren() as $child ) {
-				$html .= $this->displayCategoryRecursive( $child );
+				if( !$child->countArticles() ) {
+					continue;
+				}
+				$data['innerHtml'] .= $this->displayCategoryRecursive( $child );
 			}
-			$html .= '</'.$tagWrap.'>';
 		}
 
-		$html .= '</'.$tagList.'>';
+		$html = $this->templater->processTemplate('search_categories_category', $data);
 
 		return $html;
 	}
