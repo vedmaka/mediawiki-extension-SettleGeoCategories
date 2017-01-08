@@ -3,7 +3,7 @@
 }
 
 #country-search-wrapper .panel {
-    animation: none;
+    transition: none;
 }
 
 #country-search-wrapper ol.breadcrumb {
