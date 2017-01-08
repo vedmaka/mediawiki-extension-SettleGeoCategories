@@ -1,7 +1,7 @@
 <div id="country-search-wrapper">
 
 <p>
-    Please select a country below or see <a href="#">full list of categories</a>.
+    Please select a country below:
 </p>
 
 <div class="row">
@@ -13,6 +13,7 @@
             {{# items }}
             <li>
                 <a href="{{& url_prefix }}/{{ geonamesCode }}">{{ name }}</a>
+                {{# articles_count }}<span class="label label-success">{{ . }}</span>{{/ articles_count }}
             </li>
             {{/ items }}
         </ul>

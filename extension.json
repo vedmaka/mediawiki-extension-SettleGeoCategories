@@ -75,6 +75,15 @@
 			"styles": [
 				"modules/ext.SettleGeoCategories.input.css"
 			]
+		},
+		"ext.settlegeocategories.search": {
+			"scripts": [
+
+			],
+			"styles": [
+				"modules/ext.SettleGeoCategories.search.css"
+			],
+			"position": "top"
 		}
 	},
 	"ResourceFileModulePaths": {

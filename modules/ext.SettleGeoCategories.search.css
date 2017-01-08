@@ -1,0 +1,27 @@
+#country-search-wrapper {
+
+}
+
+#country-search-wrapper ol.breadcrumb {
+    padding-left: 0;
+}
+
+#country-search-wrapper .panel .panel-heading {
+    padding: 8px 8px;
+}
+
+#country-search-wrapper .panel .panel-heading h4 {
+    font-size: 14px;
+}
+
+#country-search-wrapper .panel .panel .panel-heading {
+    background-color: #5a93b9;
+}
+
+#country-search-wrapper .panel-body ul + .panel {
+    margin-top: 10px;
+}
+
+#country-search-wrapper .panel ul {
+    margin-bottom: 0;
+}
