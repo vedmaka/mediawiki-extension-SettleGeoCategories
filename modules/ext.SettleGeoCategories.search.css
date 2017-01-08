@@ -2,6 +2,10 @@
 
 }
 
+#country-search-wrapper .panel {
+    animation: none;
+}
+
 #country-search-wrapper ol.breadcrumb {
     padding-left: 0;
 }
