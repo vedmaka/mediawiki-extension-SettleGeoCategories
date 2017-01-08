@@ -116,6 +116,8 @@ class SpecialSettleCategorySearch extends SpecialPage {
 
 	private function displayMain() {
 
+		$this->getOutput()->setPageTitle('Search for categories');
+
 	    // Fetch countries
         $countries = SettleGeoTaxonomy::getInstance()->getEntities(
             SettleGeoTaxonomy::TYPE_COUNTRY,
