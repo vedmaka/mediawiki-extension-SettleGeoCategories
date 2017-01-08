@@ -5,8 +5,6 @@ class SpecialSettleCategorySearch extends SpecialPage {
     /** @var TemplateParser */
 	private $templater;
 
-	private $topCategoriesIdsFlat;
-
 	public function __construct() {
 		parent::__construct( 'SettleCategorySearch', 'read' );
 	}
@@ -52,59 +50,38 @@ class SpecialSettleCategorySearch extends SpecialPage {
 		$query = SphinxStore::getInstance()->getQuery();
 
 		// Fetch list of all top-level categories
-		$topCategoriesIds = array();
-		$this->topCategoriesIdsFlat = array();
+		$topCategoriesWithArticles = array();
 		$topCategories = SettleGeoCategories::getAllCategories();
 		// Pass all sub-categories ids from top-level category for easier building of Sphinx query
 		foreach ($topCategories as $topCategory) {
+
 			$item = array(
 				'title' => $topCategory->getTitleKey(),
 				'id' => $topCategory->getId(),
 				'deep_ids' => $topCategory->recursiveIds()
 			);
-			// TODO: is not very effective, but still possible to use
-			$sql = "SELECT id, ( IN( properties.geocodes, {$path[0]} ) AND IN( properties.geocategoryid, ".implode( ',', $item['deep_ids'] )." ) ) AS p FROM ".SphinxStore::getInstance()->getIndex()." WHERE p = 1;";
+
+			// Check this category and all its sub-categories ids for articles existence
+			$sql = "SELECT id, ( IN( properties.geocodes, {$path[0]} ) AND IN( properties.geocategoryid, "
+			       .implode( ',', $item['deep_ids'] )." ) ) AS p FROM ".SphinxStore::getInstance()->getIndex()." WHERE p = 1;";
+
 			$result = $query->query( $sql )->execute();
+
 			if( $result->count() ) {
-				$topCategoriesIds[] = $topCategory->getId();
-				$this->topCategoriesIdsFlat = array_merge( $this->topCategoriesIdsFlat, $item['deep_ids'] );
+				// If any, store top-category:
+				$topCategoriesWithArticles[] = $topCategory;
 			}
+
 		}
 
-		if( count($topCategoriesIds) ) {
+		if( count($topCategoriesWithArticles) ) {
 
 			$data['have_results'] = true;
 
-			// Imported from SettleGeoSearch
-			// Fetch
-			$pl1 = ", (";
-			$pl1 .= "( IN( properties.geocodes, {$path[0]} ) ) AND properties.geocategory IS NOT NULL AND IN( properties.geocategoryid, " . implode( ',', $topCategoriesIds ) . " )";
-			$pl1 .= " )";
-			$pl1 .= " AS p";
-			$pl2 = " WHERE p=1";
-			$pl3 = "";
-
-			$sql = "SELECT *{$pl1} FROM " . SphinxStore::getInstance()->getIndex() . "{$pl3}{$pl2} LIMIT 0,10000 OPTION ranker=matchany;";
-
-			$result = $query->query( $sql )->execute();
-
-			$categories = array();
-
-			if ( $result->count() ) {
-				foreach ( $result as $r ) {
-
-					$properties                                    = json_decode( $r['properties'], true );
-					$categories[ $properties['geocategoryid'][0] ] = $properties['geocategory'][0];
-				}
-			}
-
 			$categories_html = '';
-
-			// Prepare for mustache
-			foreach ( $categories as $id => $category ) {
-				$categories_html .= $this->displayCategoryRecursive( new SettleGeoCategory( $id ) );
+			foreach ( $topCategoriesWithArticles as $category ) {
+				$categories_html .= $this->displayCategoryRecursive( $category );
 			}
-
 			$data['categories_html'] = $categories_html;
 
 		}
@@ -136,6 +113,7 @@ class SpecialSettleCategorySearch extends SpecialPage {
         foreach ($countries as $country) {
 
 	        $result = $query->query('SELECT id, IN( properties.country_code, '.$country['geonamesCode'].' ) AS p FROM wiki_rt WHERE p = 1')->execute();
+
 	        //if( !$result->count() ) {
 		        // Do not include countries without articles
 		    //    continue;
