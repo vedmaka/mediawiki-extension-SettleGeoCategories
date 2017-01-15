@@ -35,7 +35,7 @@ class SettleGeoCategoryInput extends SFDropdownInput {
 		$possible_values = array();
 		$allCategories = SettleGeoCategories::getAllCategories();
 		foreach( $allCategories as $cat ) {
-			$innerDropdown .= self::displayCategoryRecursiveInput( $cat, '', $cur_value );
+			$innerDropdown .= self::displayCategoryRecursiveInput( $cat, '', $cur_value, true );
 		}
 		
 		$selectAttrs = array(
@@ -67,19 +67,21 @@ class SettleGeoCategoryInput extends SFDropdownInput {
 
 	/**
 	 * @param SettleGeoCategory $category
-	 * @param string $prefix
-	 * @param string $cur_value
+	 * @param string            $prefix
+	 * @param string            $cur_value
+	 *
+	 * @param bool              $top_disabled
 	 *
 	 * @return string
 	 */
-	public static function displayCategoryRecursiveInput( $category, $prefix = '', $cur_value )
+	public static function displayCategoryRecursiveInput( $category, $prefix = '', $cur_value, $top_disabled = false )
 	{
 		$html = '';
 		$selected = '';
 		if ( $cur_value == $category->getId() ) {
 				$selected = "selected";
 		}
-		$html .= '<option data-scope="'.$category->getGeoScope().'" '.$selected.' value="'.$category->getId().'">'.$prefix.' '.$category->getTitleKey().'</option>';
+		$html .= '<option '.($top_disabled ? 'disabled' : '').' data-scope="'.$category->getGeoScope().'" '.$selected.' value="'.$category->getId().'">'.$prefix.' '.$category->getTitleKey().'</option>';
 		if( $category->getChildren() ) {
 			foreach ( $category->getChildren() as $child ) {
 				$html .= self::displayCategoryRecursiveInput( $child, $prefix.'--', $cur_value );
