@@ -7,11 +7,11 @@
 <div class="row">
 
     {{# countries }}
-    <div class="col-xs-6 col-md-3 country-outline-item">
+    <div class="col-xs-6 col-md-3 country-outline-item animated fadeInUp" style="opacity: 0;">
         <strong>{{ title }}</strong>
         <ul>
             {{# items }}
-            <li {{^ articles_count }}class="no-articles"{{/articles_count}}>
+            <li class="{{^ articles_count }}no-articles{{/articles_count}}" >
                 <a href="{{& url_prefix }}/{{ geonamesCode }}">{{ name }}</a>
                 {{# articles_count }}<span class="label label-success">{{ . }}</span>{{/ articles_count }}
             </li>

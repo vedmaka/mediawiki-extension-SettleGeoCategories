@@ -12,6 +12,7 @@ class SpecialSettleCategorySearch extends SpecialPage {
 	public function execute( $subPage ) {
 
 		$this->getOutput()->addModules('ext.settlegeocategories.search');
+		$this->getOutput()->addModules('skins.settlein.animate.standalone');
 
 		$this->templater = new TemplateParser( dirname(__FILE__).'/../templates/', true );
 
