@@ -43,7 +43,8 @@ class SpecialSettleCategorySearch extends SpecialPage {
 			'top_text' => wfMessage('settlegeocategories-articles-categories-intro')->plain(),
 			'categories' => array(),
 			'breads' => array(),
-			'have_results' => false
+			'have_results' => false,
+			'layout_articles' => true
 		);
 
 		$country = null;
@@ -81,18 +82,20 @@ class SpecialSettleCategorySearch extends SpecialPage {
 		);
 
 		$query = SphinxStore::getInstance()->getQuery();
-		$sql = "SELECT id, properties.short_description[0] as short_description, ( IN( properties.geocodes, {$c} ) AND IN( properties.geocategoryid, {$subcategory}) ) AS p FROM ".SphinxStore::getInstance()->getIndex()." WHERE p = 1;";
+		$sql = "SELECT id, properties, ( IN( properties.geocodes, {$c} ) AND IN( properties.geocategoryid, {$subcategory}) ) AS p FROM ".SphinxStore::getInstance()->getIndex()." WHERE p = 1;";
 		$result = $query->query( $sql )->execute();
 		if( $result->count() ) {
 			foreach ($result as $r) {
 
 				$p = Title::newFromID( $r['id'] );
+				$properties = json_decode($r['properties'], true);
 
 				$data['categories'][] = array(
 					'title' => $p->getBaseText(),
 					'link' => $p->getFullURL(),
 					'icon' => 'file',
-					'desc' => $r['short_description'] ? $r['short_description'] : false
+					'desc' => array_key_exists('short_description', $properties) ? $properties['short_description'][0] : false,
+					'location_text' => SettleGeoSearch::formatLocationBreadcrumbs( $properties )
 				);
 
 				$data['have_results'] = true;

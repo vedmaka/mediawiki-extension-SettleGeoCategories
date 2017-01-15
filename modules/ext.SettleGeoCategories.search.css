@@ -49,3 +49,62 @@
 #country-search-wrapper .country-outline-item li.no-articles a {
     color: lightgrey;
 }
+
+#country-search-wrapper .panel .breadcrumb {
+    /*margin-top: -8px;*/
+    margin: 0;
+    padding: 0;
+}
+
+#country-search-wrapper .panel .breadcrumb li {
+    color: white;
+}
+
+#country-search-wrapper .panel .breadcrumb li::before {
+    color: white;
+}
+
+#country-search-wrapper .panel .breadcrumb a {
+    color: white;
+}
+
+#country-search-wrapper .panel .panel-heading {
+    background-color: #64bb5d;
+    border-bottom: 0;
+}
+
+#country-search-wrapper .panel .panel-heading a {
+    color: white;
+}
+
+#panel-categories-articles-items .panel {
+    background-color: #f9f9f9;
+}
+
+#panel-categories-articles-items .panel-heading + .panel-heading {
+    background-color: rgba(40, 174, 231, 0.75);
+    font-size: 13px;
+}
+
+#panel-categories-articles-items {
+
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display:         flex;
+    flex-wrap: wrap;
+
+}
+
+#panel-categories-articles-items > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
+#panel-categories-articles-items .panel .panel-heading i {
+    color: white;
+    font-size: 12px;
+    position: relative;
+    top: 4px;
+    padding-right: 4px;
+}
