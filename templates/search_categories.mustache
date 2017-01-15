@@ -1,26 +1,42 @@
 <div id="country-search-wrapper">
 
     <ol class="breadcrumb">
-        <li><a href="{{ backlink }}">Countries</a></li>
-        <li class="active">{{ country_text }}</li>
-    </ol>
+        {{# breads }}
+            {{# active }}
+                <li class="active">
+                    {{ title }}
+                </li>
+            {{/active}}
+            {{^ active }}
+                <li>
+                    <a href="{{ link }}">{{ title }}</a>
+                </li>
+            {{/active}}
 
-    <!--<h3>{{ country_text }}</h3>-->
+        {{/ breads }}
+    </ol>
 
     {{# have_results }}
 
-    <p>
-        Please select a category below.
-        Only categories that contain at least one article are displayed.
-    </p>
+    <p>{{& top_text }}</p>
 
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-        {{& categories_html }}
-    </div>
+    <ul class="primary-list-block">
+        {{# categories }}
+            <li>
+                <i class="glyphicon glyphicon-{{ icon }}"></i>
+                <a href="{{ link }}">
+                    {{ title }}
+                </a>
+                {{# desc }}
+                    <span class="text-muted">{{ . }}</span>
+                {{/ desc}}
+            </li>
+        {{/ categories }}
+    </ul>
 
     {{/ have_results }}
     {{^ have_results }}
-        <p>There are no articles in this country.</p>
+        <p>{{ _ "settlegeocategories-no-results" }}</p>
     {{/ have_results }}
 
 </div>

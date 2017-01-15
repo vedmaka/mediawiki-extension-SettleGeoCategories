@@ -11,7 +11,7 @@
         <strong>{{ title }}</strong>
         <ul>
             {{# items }}
-            <li>
+            <li {{^ articles_count }}class="no-articles"{{/articles_count}}>
                 <a href="{{& url_prefix }}/{{ geonamesCode }}">{{ name }}</a>
                 {{# articles_count }}<span class="label label-success">{{ . }}</span>{{/ articles_count }}
             </li>

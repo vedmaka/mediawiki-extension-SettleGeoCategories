@@ -21,12 +21,225 @@ class SpecialSettleCategorySearch extends SpecialPage {
 		}else{
             // Country specified, parse path
             $path = explode('/', $subPage);
-            $this->displayCategories( $path );
+            // Display main categories list
+            if( count($path) === 1 ) {
+	            $this->displayMainCategories( $path[0] );
+            }
+            // Display sub-category
+            if( count($path) === 2 ) {
+            	$this->displaySubCategories( $path[0], $path[1] );
+            }
+            // Display articles
+			if( count($path) === 3 ) {
+            	$this->displayArticles( $path[0], $path[1], $path[2] );
+			}
 		}
 
 	}
 
-	private function displayCategories( $path ) {
+	private function displayArticles( $c, $category, $subcategory ) {
+
+		$data = array(
+			'top_text' => wfMessage('settlegeocategories-articles-categories-intro')->plain(),
+			'categories' => array(),
+			'breads' => array(),
+			'have_results' => false
+		);
+
+		$country = null;
+		try {
+			$earth = new MenaraSolutions\Geographer\Earth();
+			$country = $earth->findOne( array('geonamesCode' => $c) );
+			$countryText = $country->getShortName();
+		}catch (Exception $e) {
+			die('Something gone wrong, please contact site administrator.');
+		}
+
+		$sCategory = new SettleGeoCategory($category);
+		$sSubCategory = new SettleGeoCategory($subcategory);
+
+		$data['breads'] = array(
+			array(
+				'link' => SpecialPage::getTitleFor('SettleCategorySearch')->getFullURL(),
+				'title' => 'Countries',
+				'active' => false
+			),
+			array(
+				'title' => $countryText,
+				'link' => SpecialPage::getTitleFor('SettleCategorySearch')->getFullURL().'/'.$country['geonamesCode'],
+				'active' => false
+			),
+			array(
+				'title' => $sCategory->getTitleKey(),
+				'link' => SpecialPage::getTitleFor('SettleCategorySearch')->getFullURL().'/'.$country['geonamesCode'].'/'.$sCategory->getId(),
+				'active' => false
+			),
+			array(
+				'title' => $sSubCategory->getTitleKey(),
+				'active' => true
+			)
+		);
+
+		$query = SphinxStore::getInstance()->getQuery();
+		$sql = "SELECT id, properties.short_description[0] as short_description, ( IN( properties.geocodes, {$c} ) AND IN( properties.geocategoryid, {$subcategory}) ) AS p FROM ".SphinxStore::getInstance()->getIndex()." WHERE p = 1;";
+		$result = $query->query( $sql )->execute();
+		if( $result->count() ) {
+			foreach ($result as $r) {
+
+				$p = Title::newFromID( $r['id'] );
+
+				$data['categories'][] = array(
+					'title' => $p->getBaseText(),
+					'link' => $p->getFullURL(),
+					'icon' => 'file',
+					'desc' => $r['short_description'] ? $r['short_description'] : false
+				);
+
+				$data['have_results'] = true;
+			}
+		}
+
+		$this->getOutput()->setPageTitle( $countryText .' - '.$sCategory->getTitleKey().' - '.$sSubCategory->getTitleKey() );
+
+		$html = $this->templater->processTemplate( 'search_categories', $data );
+		$this->getOutput()->addHTML( $html );
+
+	}
+
+	private function displaySubCategories( $c, $category ) {
+
+		$data = array(
+			'top_text' => wfMessage('settlegeocategories-sub-categories-intro')->plain(),
+			'categories' => array(),
+			'breads' => array(),
+			'have_results' => false
+		);
+
+		$country = null;
+		try {
+			$earth = new MenaraSolutions\Geographer\Earth();
+			$country = $earth->findOne( array('geonamesCode' => $c) );
+			$countryText = $country->getShortName();
+		}catch (Exception $e) {
+			die('Something gone wrong, please contact site administrator.');
+		}
+
+		$sCategory = new SettleGeoCategory($category);
+
+		$data['breads'] = array(
+			array(
+				'link' => SpecialPage::getTitleFor('SettleCategorySearch')->getFullURL(),
+				'title' => 'Countries',
+				'active' => false
+			),
+			array(
+				'title' => $countryText,
+				'link' => SpecialPage::getTitleFor('SettleCategorySearch')->getFullURL().'/'.$country['geonamesCode'],
+				'active' => false
+			),
+			array(
+				'title' => $sCategory->getTitleKey(),
+				'active' => true
+			)
+		);
+
+		foreach ($sCategory->getChildren() as $child) {
+			// TODO: blocking for hierarchy more than 3 levels deep
+			if( !$child->countArticles() ) {
+				continue;
+			}
+			$data['categories'][] = array(
+				'title' => $child->getTitleKey(),
+				'link' => SpecialPage::getTitleFor('SettleCategorySearch')->getFullURL().'/'.$country['geonamesCode'].'/'.$category.'/'.$child->getId(),
+				'icon' => 'tags'
+			);
+			$data['have_results'] = true;
+		}
+
+		$this->getOutput()->setPageTitle( $countryText .' - '.$sCategory->getTitleKey() );
+
+		$html = $this->templater->processTemplate( 'search_categories', $data );
+		$this->getOutput()->addHTML( $html );
+
+	}
+
+	private function displayMainCategories( $countryId ) {
+
+		$data = array(
+			'top_text' => wfMessage('settlegeocategories-main-categories-intro')->plain(),
+			'categories' => array(),
+			'breads' => array(),
+			'have_results' => false
+		);
+
+		$country = null;
+		try {
+			$earth = new MenaraSolutions\Geographer\Earth();
+			$country = $earth->findOne( array('geonamesCode' => $countryId) );
+			$country = $country->getShortName();
+		}catch (Exception $e) {
+			die('Something gone wrong, please contact site administrator.');
+		}
+
+
+		$data['breads'] = array(
+			array(
+				'link' => SpecialPage::getTitleFor('SettleCategorySearch')->getFullURL(),
+				'title' => 'Countries',
+				'active' => false
+			),
+			array(
+				'title' => $country,
+				'active' => true
+			)
+		);
+
+		$this->getOutput()->setPageTitle( $country );
+
+		$query = SphinxStore::getInstance()->getQuery();
+
+		// Fetch list of all top-level categories
+		//$topCategoriesWithArticles = array();
+		$topCategories = SettleGeoCategories::getAllCategories();
+		// Pass all sub-categories ids from top-level category for easier building of Sphinx query
+		foreach ($topCategories as $topCategory) {
+
+			$item = array(
+				'title' => $topCategory->getTitleKey(),
+				'id' => $topCategory->getId(),
+				'deep_ids' => $topCategory->recursiveIds()
+			);
+
+			// Check this category and all its sub-categories ids for articles existence
+			$sql = "SELECT id, ( IN( properties.geocodes, {$countryId} ) AND IN( properties.geocategoryid, "
+			       .implode( ',', $item['deep_ids'] )." ) ) AS p FROM ".SphinxStore::getInstance()->getIndex()." WHERE p = 1;";
+
+			$result = $query->query( $sql )->execute();
+
+			if( $result->count() ) {
+				// If any, store top-category:
+				//$topCategoriesWithArticles[] = $topCategory;
+				$data['categories'][] = array(
+					'title' => $topCategory->getTitleKey(),
+					'id' => $topCategory->getId(),
+					'link' => SpecialPage::getTitleFor('SettleCategorySearch')->getFullURL().'/'.$countryId.'/'.$topCategory->getId(),
+					'icon' => 'tag'
+				);
+				$data['have_results'] = true;
+			}
+
+		}
+
+		$html = $this->templater->processTemplate( 'search_categories', $data );
+		$this->getOutput()->addHTML( $html );
+
+	}
+
+	/**
+	 * @param $path
+	 * @deprecated
+	 */
+	private function _displayCategories( $path ) {
 
 		$data = array(
 			'categories' => array(),
