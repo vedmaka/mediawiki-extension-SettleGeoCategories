@@ -8,7 +8,7 @@
   "settlegeocategories-scope-1": "state",
   "settlegeocategories-scope-2": "city",
   "settlegeocategories-no-results": "There are no results found.",
-  "settlegeocategories-main-categories-intro": "Please select a main category below. Only categories that contain at least one article are displayed.",
+  "settlegeocategories-main-categories-intro": "Please select a main category below to start browsing through categories.",
   "settlegeocategories-sub-categories-intro": "Please select a sub-category below. Only categories that contain at least one article are displayed.",
   "settlegeocategories-articles-categories-intro": "Below you can see list of articles within selected category."
 }
