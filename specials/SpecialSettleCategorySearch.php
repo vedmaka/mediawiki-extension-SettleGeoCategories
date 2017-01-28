@@ -329,7 +329,7 @@ class SpecialSettleCategorySearch extends SpecialPage {
 
         foreach ($countries as $country) {
 
-	        $result = $query->query('SELECT id, IN( properties.country_code, '.$country['geonamesCode'].' ) AS p FROM wiki_rt WHERE p = 1')->execute();
+	        $result = $query->query('SELECT id, IN( properties.country_code, '.$country['geonamesCode'].' ) AS p FROM '.SphinxStore::getInstance()->getIndex().' WHERE p = 1')->execute();
 
 	        //if( !$result->count() ) {
 		        // Do not include countries without articles
