@@ -108,3 +108,106 @@
     top: 4px;
     padding-right: 4px;
 }
+
+/* -------- ajax ------------------ */
+
+.country-search-ajax {
+
+}
+
+.country-search-ajax #csw-items {
+
+}
+
+.country-search-ajax #csw-items .csw-category-item {
+    background-color: #64bb5d;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.country-search-ajax #csw-items .csw-category-item:hover {
+    background-color: #72d064;
+}
+
+.country-search-ajax #csw-items .csw-category-item i {
+    margin-right: 2px;
+}
+
+.country-search-ajax #csw-sub-items .csw-sub-category-item {
+    background-color: #64bb5d;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+
+    /*background-color: white;*/
+    /*border: 1px solid #5a93b9;*/
+    /*color: #555;*/
+}
+
+.country-search-ajax #csw-sub-items {
+    margin-top: 15px;
+}
+
+.country-search-ajax #csw-sub-items .csw-sub-category-item:hover {
+    background-color: #72d064;
+}
+
+.country-search-ajax #csw-items .csw-active {
+    /*width: 100%;*/
+    /*margin-top: 5px;*/
+    /*transition: width 0.2s;*/
+}
+
+.country-search-ajax #csw-items .csw-active .csw-category-item,
+.country-search-ajax #csw-items .csw-active .csw-sub-category-item {
+    background-color: #5a93b9;
+    cursor: default;
+}
+
+.country-search-ajax #csw-pages-items {
+    margin-top: 15px;
+}
+
+/* --- pages in ajax categories --- */
+
+.country-search-ajax #csw-pages-items .panel .panel-heading {
+    background-color: #64bb5d;
+    border-bottom: 0;
+}
+
+.country-search-ajax #csw-pages-items .panel .panel-heading a {
+    color: white;
+}
+
+.country-search-ajax #csw-pages-items .panel {
+    background-color: #f9f9f9;
+}
+
+.country-search-ajax #csw-pages-items .panel-heading + .panel-heading {
+    background-color: rgba(40, 174, 231, 0.75);
+    font-size: 13px;
+}
+
+.country-search-ajax #csw-pages-items {
+
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display:         flex;
+    flex-wrap: wrap;
+
+}
+
+.country-search-ajax #csw-pages-items > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
+.country-search-ajax #csw-pages-items .panel .panel-heading i {
+    color: white;
+    font-size: 12px;
+    position: relative;
+    top: 4px;
+    padding-right: 4px;
+}

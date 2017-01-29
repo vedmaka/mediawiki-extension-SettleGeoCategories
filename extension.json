@@ -78,11 +78,19 @@
 		},
 		"ext.settlegeocategories.search": {
 			"scripts": [
-
+				"modules/ext.SettleGeoCategories.search.js"
 			],
 			"styles": [
 				"modules/ext.SettleGeoCategories.search.css"
 			],
+			"templates": {
+				"category_item.ajax.mustache": "templates/category_item.ajax.mustache",
+				"sub_category_item.ajax.mustache": "templates/sub_category_item.ajax.mustache",
+                "ajax_article.mustache": "templates/ajax_article.mustache"
+			},
+            "messages": [
+                "settlegeocategories-ajax-no-sub-categories"
+            ],
 			"position": "top"
 		}
 	},

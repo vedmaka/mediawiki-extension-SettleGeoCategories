@@ -169,6 +169,47 @@ class SpecialSettleCategorySearch extends SpecialPage {
 
 	private function displayMainCategories( $countryId ) {
 
+	    // Determine country entity
+        $country = null;
+        try {
+            $earth = new MenaraSolutions\Geographer\Earth();
+            $country = $earth->findOne( array('geonamesCode' => $countryId) );
+            $country = $country->getShortName();
+        }catch (Exception $e) {
+            die('Something gone wrong, please contact site administrator.');
+        }
+
+        // Page title
+        $this->getOutput()->setPageTitle( $country );
+
+        // Initialize data
+        $data = array(
+            'top_text' => wfMessage('settlegeocategories-main-categories-intro')->plain(),
+            'breads' => array(),
+            'country' => $countryId
+        );
+
+        // Format breadcrumbs
+        $data['breads'] = array(
+            array(
+                'link' => SpecialPage::getTitleFor('SettleCategorySearch')->getFullURL(),
+                'title' => 'Countries',
+                'active' => false
+            ),
+            array(
+                'title' => $country,
+                'active' => true
+            )
+        );
+
+        // Render markup
+        $html = $this->templater->processTemplate( 'search_categories_ajax', $data );
+        $this->getOutput()->addHTML( $html );
+
+    }
+
+	private function displayMainCategoriesEx( $countryId ) {
+
 		$data = array(
 			'top_text' => wfMessage('settlegeocategories-main-categories-intro')->plain(),
 			'categories' => array(),

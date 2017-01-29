@@ -1,0 +1,31 @@
+<div id="country-search-wrapper" class="country-search-ajax" data-country-id="{{ country }}">
+
+    <ol class="breadcrumb">
+        {{# breads }}
+            {{# active }}
+                <li class="active">
+                    {{ title }}
+                </li>
+            {{/active}}
+            {{^ active }}
+                <li>
+                    <a href="{{ link }}">{{ title }}</a>
+                </li>
+            {{/active}}
+
+        {{/ breads }}
+    </ol>
+
+    <div class="row" id="csw-items">
+        <div class="col-md-12"> Loading categories .. </div>
+    </div>
+
+    <div class="row" id="csw-sub-items">
+
+    </div>
+
+    <div class="row" id="csw-pages-items">
+
+    </div>
+
+</div>

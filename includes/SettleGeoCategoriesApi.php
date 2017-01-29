@@ -148,6 +148,8 @@ class SettleGeoCategoriesApi extends ApiBase {
 
 	protected function methodRead() {
 
+	    $withPages = array_key_exists('country_id', $this->parsedParams);
+
 		$categoriesObjects = SettleGeoCategories::getAllCategories();
 		$categoriesArray = array();
 		foreach ($categoriesObjects as $categoriesObject) {
@@ -161,7 +163,7 @@ class SettleGeoCategoriesApi extends ApiBase {
 				'li_attr' => array(
 					'flag-scope' => $categoriesObject->getGeoScope()
 				),
-				'children' => $this->fetchCategoryRecursive( $categoriesObject )
+				'children' => $this->fetchCategoryRecursive( $categoriesObject, $withPages )
 			);
 		}
 
@@ -169,15 +171,37 @@ class SettleGeoCategoriesApi extends ApiBase {
 
 	}
 
-	/**
-	 * @param SettleGeoCategory $category
-	 *
-	 * @return string
-	 */
-	private function fetchCategoryRecursive( $category ) {
+    /**
+     * @param SettleGeoCategory $category
+     *
+     * @param bool $withPages
+     * @return string
+     */
+	private function fetchCategoryRecursive( $category, $withPages = false ) {
 		$result = array();
 		if( $category->getChildren() ) {
 			foreach ( $category->getChildren() as $child ) {
+
+			    $pages = array();
+			    if( $withPages ) {
+			        $query = SphinxStore::getInstance()->getQuery();
+			        $sql = "SELECT *, IN( properties.geocategoryid, {$child->getId()} ) as p FROM ".SphinxStore::getInstance()->getIndex().' WHERE p = 1';
+                    $queryResult = $query->query( $sql )->execute();
+                    if( $queryResult->count() ) {
+                        foreach ($queryResult as $r) {
+                            $properties = json_decode($r['properties'], true);
+                            $pages[] = array(
+                                'id' => $r['id'],
+                                'title' => $r['alias_title'],
+                                'real_title' => $r['page_title'],
+                                'link' => Title::newFromID( $r['id'] )->getFullURL(),
+                                'desc' => $properties['short_description'] ? $properties['short_description'][0] : '',
+                                'location_text' => SettleGeoSearch::formatLocationBreadcrumbs($properties)
+                            );
+                        }
+                    }
+			    }
+
 				$result[] = array(
 					'id' => $child->getId(),
 					'text' => $child->getTitleKey(),
@@ -188,7 +212,8 @@ class SettleGeoCategoriesApi extends ApiBase {
 					'li_attr' => array(
 						'flag-scope' => $child->getGeoScope()
 					),
-					'children' => $this->fetchCategoryRecursive( $child )
+					'children' => $this->fetchCategoryRecursive( $child, $withPages ),
+                    'pages' => $pages
 				);
 			}
 		}
@@ -217,7 +242,11 @@ class SettleGeoCategoriesApi extends ApiBase {
 			'parent' => array(
 				ApiBase::PARAM_TYPE => 'integer',
 				ApiBase::PARAM_REQUIRED => false
-			)
+			),
+            'country_id' => array(
+                ApiBase::PARAM_TYPE => 'integer',
+                ApiBase::PARAM_REQUIRED => false
+            ),
 		);
 
 	}
