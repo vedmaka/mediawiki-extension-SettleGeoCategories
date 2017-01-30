@@ -31,7 +31,7 @@ $(function(){
 
             var html = itemTemplate.render(item);
 
-            html.find('.csw-category-item').click(function(){
+            $(html).find('.csw-category-item').click(function(){
 
                 if( $(this).parent().hasClass('csw-active') ) {
                     return false;
@@ -53,7 +53,7 @@ $(function(){
 
                         var childHtml = childTemplate.render( child );
 
-                        childHtml.find('.csw-sub-category-item').click(function(){
+                        $(childHtml).find('.csw-sub-category-item').click(function(){
 
                             if( $(this).parent().hasClass('csw-active') ) {
                                 return false;
