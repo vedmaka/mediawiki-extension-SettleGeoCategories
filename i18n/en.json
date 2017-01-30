@@ -11,5 +11,6 @@
   "settlegeocategories-main-categories-intro": "Please select a main category below to start browsing through categories.",
   "settlegeocategories-sub-categories-intro": "Please select a sub-category below. Only categories that contain at least one article are displayed.",
   "settlegeocategories-articles-categories-intro": "Below you can see list of articles within selected category.",
-  "settlegeocategories-ajax-no-sub-categories": "No sub-categories yet."
+  "settlegeocategories-ajax-no-sub-categories": "No sub-categories yet.",
+  "settlegeocategories-ajax-no-pages-categories": "No pages yet."
 }

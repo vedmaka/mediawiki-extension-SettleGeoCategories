@@ -66,7 +66,7 @@ $(function(){
 
                             if( !child.pages.length ) {
                                 containerPages.html( '<div class="col-md-12">' +
-                                    mw.msg('settlegeocategories-ajax-no-sub-categories') + "</div>" );
+                                    mw.msg('settlegeocategories-ajax-no-pages-categories') + "</div>" );
                             }else{
 
                                 $.each( child.pages, function(k, page){

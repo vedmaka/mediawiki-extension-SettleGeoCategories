@@ -89,7 +89,8 @@
                 "ajax_article.mustache": "templates/ajax_article.mustache"
 			},
             "messages": [
-                "settlegeocategories-ajax-no-sub-categories"
+                "settlegeocategories-ajax-no-sub-categories",
+                "settlegeocategories-ajax-no-pages-categories"
             ],
 			"position": "top"
 		}

@@ -136,7 +136,8 @@
 }
 
 .country-search-ajax #csw-sub-items .csw-sub-category-item {
-    background-color: #64bb5d;
+    /*background-color: #64bb5d;*/
+    background-color: rgba(93, 187, 131, 0.83);
     color: white;
     padding: 5px 10px;
     cursor: pointer;
