@@ -51,6 +51,8 @@ $(function(){
 
                     $.each( item.children, function(j, child){
 
+                        child.count = child.pages.length;
+
                         var childHtml = childTemplate.render( child );
 
                         $(childHtml).find('.csw-sub-category-item').click(function(){

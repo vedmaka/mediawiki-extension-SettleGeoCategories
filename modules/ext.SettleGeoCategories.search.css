@@ -214,3 +214,9 @@
     top: 4px;
     padding-right: 4px;
 }
+
+span.csw-count {
+    padding: 0 2px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 300;
+}

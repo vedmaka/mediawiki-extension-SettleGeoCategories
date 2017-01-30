@@ -179,6 +179,7 @@ class SettleGeoCategoriesApi extends ApiBase {
      */
 	private function fetchCategoryRecursive( $category, $withPages = false ) {
 		$result = array();
+
 		if( $category->getChildren() ) {
 			foreach ( $category->getChildren() as $child ) {
 
