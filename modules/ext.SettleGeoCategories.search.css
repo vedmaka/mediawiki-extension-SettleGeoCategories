@@ -162,7 +162,7 @@
 }
 
 .country-search-ajax #csw-items .csw-active .csw-category-item,
-.country-search-ajax #csw-items .csw-active .csw-sub-category-item {
+.country-search-ajax #csw-sub-items .csw-active .csw-sub-category-item {
     background-color: #5a93b9;
     cursor: default;
 }
