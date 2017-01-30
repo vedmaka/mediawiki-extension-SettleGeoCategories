@@ -27,7 +27,10 @@ $(function(){
         // Render top categories
         $.each(response.response, function(i, item) {
 
-            item.count = item.children.length;
+            item.count = 0;
+            $.each(item.children, function(t,g) {
+               item.count += g.pages.length;
+            });
 
             var html = itemTemplate.render(item);
 
@@ -44,7 +47,7 @@ $(function(){
                 containerSub.html('');
                 containerPages.html('');
 
-                if( !item.count ) {
+                if( !item.children.length ) {
                     containerSub.html( '<div class="col-md-12">' +
                         mw.msg('settlegeocategories-ajax-no-sub-categories') + "</div>" );
                 }else{
