@@ -157,13 +157,33 @@ class SettleGeoCategories
 			
 			self::addPageToCategory( $parser->getTitle(), $cid );
 			
-			$car[$cid] = $cat->getTitleKey();
+			$car[$cid] = $cat;
 		}
 
-		$html = '';
+		$html = '<ol class="breadcrumb card-categories-list">';
+		/**
+		 * @var int $cK
+		 * @var SettleGeoCategory $cV
+		 */
 		foreach ($car as $cK => $cV) {
-			$html .= $parser->insertStripItem( '<span class="label label-default"><a href="'.$catLink.'/'.$cK.'">'.$cV.'</a></span>' );
+			// Display all categories hierarchy
+			// Although we agreed that there should be always only one category ( controlled by input right now )
+
+			if( $cV->getParentId() === null ) {
+				// This is the top level category
+				$html .= $parser->insertStripItem( '<li><a href="'.$catLink.'/'.$cK.'">'.$cV->getTitleKey().'</a></li>' );
+			}else{
+				// This is child category
+				$html .= $parser->insertStripItem( '<li><a href="'.$catLink.'/'.$cK.'">'.$cV->getTitleKey().'</a></li>' );
+				//TODO: refactor this, right now it support only 2 level hierarchy
+				$pCat = new SettleGeoCategory( $cV->getParentId() );
+				if( $pCat ) {
+					$html .= $parser->insertStripItem( '<li><a href="'.$catLink.'/'.$pCat->getId().'">'.$pCat->getTitleKey().'</a></li>' );
+				}
+			}
 		}
+
+		$html .= '</ol>';
 
 		// Print out categories names
 		return array(
