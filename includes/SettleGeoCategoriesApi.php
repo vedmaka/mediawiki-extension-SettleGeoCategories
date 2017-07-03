@@ -149,6 +149,10 @@ class SettleGeoCategoriesApi extends ApiBase {
 	protected function methodRead() {
 
 	    $withPages = array_key_exists('country_id', $this->parsedParams);
+		$countryCode = false;
+	    if( $withPages ) {
+		    $countryCode = $this->parsedParams['country_id'];
+	    }
 
 		$categoriesObjects = SettleGeoCategories::getAllCategories();
 		$categoriesArray = array();
@@ -163,7 +167,7 @@ class SettleGeoCategoriesApi extends ApiBase {
 				'li_attr' => array(
 					'flag-scope' => $categoriesObject->getGeoScope()
 				),
-				'children' => $this->fetchCategoryRecursive( $categoriesObject, $withPages )
+				'children' => $this->fetchCategoryRecursive( $categoriesObject, $withPages, $countryCode )
 			);
 		}
 
@@ -171,13 +175,15 @@ class SettleGeoCategoriesApi extends ApiBase {
 
 	}
 
-    /**
-     * @param SettleGeoCategory $category
-     *
-     * @param bool $withPages
-     * @return string
-     */
-	private function fetchCategoryRecursive( $category, $withPages = false ) {
+	/**
+	 * @param SettleGeoCategory $category
+	 *
+	 * @param bool              $withPages
+	 * @param bool              $countryCode
+	 *
+	 * @return string
+	 */
+	private function fetchCategoryRecursive( $category, $withPages = false, $countryCode = false ) {
 		$result = array();
 
 		if( $category->getChildren() ) {
@@ -186,7 +192,7 @@ class SettleGeoCategoriesApi extends ApiBase {
 			    $pages = array();
 			    if( $withPages ) {
 			        $query = SphinxStore::getInstance()->getQuery();
-			        $sql = "SELECT *, IN( properties.geocategoryid, {$child->getId()} ) as p FROM ".SphinxStore::getInstance()->getIndex().' WHERE p = 1';
+			        $sql = "SELECT *, IN( properties.geocategoryid, {$child->getId()} ) as p, IN( properties.country_code, {$countryCode} ) as d FROM ".SphinxStore::getInstance()->getIndex().' WHERE p = 1 AND d = 1';
                     $queryResult = $query->query( $sql )->execute();
                     if( $queryResult->count() ) {
                         foreach ($queryResult as $r) {
