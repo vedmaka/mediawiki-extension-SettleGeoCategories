@@ -74,7 +74,7 @@ $(function(){
 									return false;
 								}
 
-								containerSub.removeClass('csw-active');
+								containerSub.find('.csw-active').removeClass('csw-active');
 								$(this).addClass('csw-active');
 
 								containerPages.html('');
