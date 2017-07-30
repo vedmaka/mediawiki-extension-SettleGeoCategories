@@ -16,86 +16,101 @@ $(function(){
     var containerSub = $('#csw-sub-items');
     var containerPages = $('#csw-pages-items');
 
-    $.get(apiUrl + '&action=settlecategories&method=read&country_id='+country_id, function (response) {
+    var responseCache = null;
 
-        console.log(response);
+	$.get(apiUrl + '&action=settlecategories&method=read&country_id='+country_id, function (response) {
+		responseCache = response;
+		displayCategories( responseCache );
+	});
 
-        // Clear our container
-        container.html('');
-        containerSub.html('');
+    function displayCategories( response ) {
 
-        // Render top categories
-        $.each(response.response, function(i, item) {
+			// Clear our container
+			container.html('');
+			containerSub.html('');
+			containerPages.html('');
 
-            item.count = 0;
-            $.each(item.children, function(t,g) {
-               item.count += g.pages.length;
-            });
+			// Render top categories
+			$.each(response.response, function(i, item) {
 
-            var html = itemTemplate.render(item);
+				item.count = 0;
+				$.each(item.children, function(t,g) {
+					item.count += g.pages.length;
+				});
 
-            $(html).find('.csw-category-item').click(function(){
+				var html = itemTemplate.render(item);
 
-                if( $(this).parent().hasClass('csw-active') ) {
-                    return false;
-                }
+				$(html).click(function(){
 
-                container.find('.csw-active').removeClass('csw-active');
-                $(this).parent().addClass('csw-active');
-                //$(this).parent().appendTo( container );
+					if( $(this).hasClass('csw-active') ) {
+						return false;
+					}
 
-                containerSub.html('');
-                containerPages.html('');
+					$('.csw-back').show();
 
-                if( !item.children.length ) {
-                    containerSub.html( '<div class="col-md-12">' +
-                        mw.msg('settlegeocategories-ajax-no-sub-categories') + "</div>" );
-                }else{
+					container.find('.csw-active').removeClass('csw-active');
+					$('.csw-category-item').hide();
+					$(this).show();
+					$(this).addClass('csw-active');
+					//$(this).parent().appendTo( container );
 
-                    $.each( item.children, function(j, child){
+					containerSub.html('');
+					containerPages.html('');
 
-                        child.count = child.pages.length;
+					if( !item.children.length ) {
+						containerSub.html( '<div class="col-md-12">' +
+							mw.msg('settlegeocategories-ajax-no-sub-categories') + "</div>" );
+					}else{
 
-                        var childHtml = childTemplate.render( child );
+						$.each( item.children, function(j, child){
 
-                        $(childHtml).find('.csw-sub-category-item').click(function(){
+							child.count = child.pages.length;
 
-                            if( $(this).parent().hasClass('csw-active') ) {
-                                return false;
-                            }
+							var childHtml = childTemplate.render( child );
 
-                            containerSub.find('.csw-active').removeClass('csw-active');
-                            $(this).parent().addClass('csw-active');
+							$(childHtml).click(function(){
 
-                            containerPages.html('');
+								if( $(this).hasClass('csw-active') ) {
+									return false;
+								}
 
-                            if( !child.pages.length ) {
-                                containerPages.html( '<div class="col-md-12">' +
-                                    mw.msg('settlegeocategories-ajax-no-pages-categories') + "</div>" );
-                            }else{
+								containerSub.removeClass('csw-active');
+								$(this).addClass('csw-active');
 
-                                $.each( child.pages, function(k, page){
+								containerPages.html('');
 
-                                    var pageHtml = pageTemplate.render( page );
-                                    containerPages.append( pageHtml );
+								if( !child.pages.length ) {
+									containerPages.html( '<div class="col-md-12">' +
+										mw.msg('settlegeocategories-ajax-no-pages-categories') + "</div>" );
+								}else{
 
-                                });
+									$.each( child.pages, function(k, page){
 
-                            }
+										var pageHtml = pageTemplate.render( page );
+										containerPages.append( pageHtml );
 
-                        });
+									});
 
-                        containerSub.append( childHtml );
+								}
 
-                    });
-                }
+							});
 
-            });
+							containerSub.append( childHtml );
 
-            container.append(html);
+						});
 
-        });
+					}
 
+				});
+
+				container.append(html);
+
+			});
+    }
+
+    $('.csw-back').click(function(){
+        displayCategories(responseCache);
+        $(this).hide();
     });
 
 });

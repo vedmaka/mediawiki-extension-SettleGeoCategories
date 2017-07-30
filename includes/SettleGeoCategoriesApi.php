@@ -197,13 +197,27 @@ class SettleGeoCategoriesApi extends ApiBase {
                     if( $queryResult->count() ) {
                         foreach ($queryResult as $r) {
                             $properties = json_decode($r['properties'], true);
+
+	                        $pageAuthor = User::newFromId( Title::newFromID($r['id'])->getFirstRevision()->getUser() );
+	                        $pageAuthorStr = $pageAuthor->getName();
+	                        $pageAuthorImg = "/extensions/SettleGeoSearch/assets/img/avatar-large.png";
+	                        if( OpauthProfile::exists( $pageAuthor->getId() ) ) {
+		                        $profile = new OpauthProfile( $pageAuthor->getId() );
+		                        if( $profile->image ) {
+			                        $pageAuthorImg = $profile->image;
+		                        }
+	                        }
+
                             $pages[] = array(
                                 'id' => $r['id'],
                                 'title' => $r['alias_title'],
                                 'real_title' => $r['page_title'],
                                 'link' => Title::newFromID( $r['id'] )->getFullURL(),
                                 'desc' => $properties['short_description'] ? $properties['short_description'][0] : '',
-                                'location_text' => SettleGeoSearch::formatLocationBreadcrumbs($properties)
+                                'location_text' => SettleGeoSearch::formatLocationBreadcrumbs($properties),
+	                            'page_author' => $pageAuthorStr,
+	                            'userlink' => $pageAuthor->getUserPage()->getFullURL(),
+	                            'page_author_image' => $pageAuthorImg
                             );
                         }
                     }

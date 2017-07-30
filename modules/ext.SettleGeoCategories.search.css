@@ -111,24 +111,60 @@
 
 /* -------- ajax ------------------ */
 
+.csw-back {
+    background-color: white;
+    color: #00a6e3;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 10px auto 10px auto;
+    border: 1px solid #00a6e3;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 15px;
+    text-align: center;
+    width: 100px;
+    display: none;
+}
+
+.csw-back:hover {
+    color: white;
+    background-color: #00a6e3;
+}
+
 .country-search-ajax {
 
 }
 
 .country-search-ajax #csw-items {
-
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
 }
 
 .country-search-ajax #csw-items .csw-category-item {
-    background-color: #64bb5d;
-    color: white;
+    background-color: white;
+    color: #58595b;
     padding: 5px 10px;
     cursor: pointer;
-    margin-bottom: 5px;
+    margin: 0 auto 10px auto;
+    border: 1px solid #00a6e3;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 15px;
+    text-align: left;
+    min-width: 40%;
 }
 
 .country-search-ajax #csw-items .csw-category-item:hover {
-    background-color: #72d064;
+    background-color: #00a6e3;
+    color: white;
+}
+
+.country-search-ajax #csw-items .csw-category-item.csw-active {
+    background-color: #00a6e3;
+    color: white;
+    cursor: default;
 }
 
 .country-search-ajax #csw-items .csw-category-item i {
@@ -136,85 +172,41 @@
 }
 
 .country-search-ajax #csw-sub-items .csw-sub-category-item {
-    /*background-color: #64bb5d;*/
-    background-color: rgba(93, 187, 131, 0.83);
-    color: white;
-    padding: 5px 10px;
+    background-color: white;
+    color: #39b54a;
+    padding: 8px 10px 5px 10px;
     cursor: pointer;
-    margin-bottom: 5px;
-
-    /*background-color: white;*/
-    /*border: 1px solid #5a93b9;*/
-    /*color: #555;*/
+    margin: 0 auto 10px auto;
+    border: 1px solid #39b54a;
+    border-radius: 15px;
+    font-weight: normal;
+    font-size: 15px;
+    text-align: left;
+    min-width: 40%;
 }
 
 .country-search-ajax #csw-sub-items {
+    margin-top: 0;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.country-search-ajax #csw-sub-items .csw-sub-category-item:hover,
+.country-search-ajax #csw-sub-items .csw-sub-category-item.csw-active {
+    background-color: #39b54a;
+    color: white;
+}
+
+#csw-pages-items {
     margin-top: 15px;
-}
-
-.country-search-ajax #csw-sub-items .csw-sub-category-item:hover {
-    background-color: #72d064;
-}
-
-.country-search-ajax #csw-items .csw-active {
-    /*width: 100%;*/
-    /*margin-top: 5px;*/
-    /*transition: width 0.2s;*/
-}
-
-.country-search-ajax #csw-items .csw-active .csw-category-item,
-.country-search-ajax #csw-sub-items .csw-active .csw-sub-category-item {
-    background-color: #5a93b9;
-    cursor: default;
-}
-
-.country-search-ajax #csw-pages-items {
-    margin-top: 15px;
+    color: white;
 }
 
 /* --- pages in ajax categories --- */
 
-.country-search-ajax #csw-pages-items .panel .panel-heading {
-    background-color: #64bb5d;
-    border-bottom: 0;
-}
-
-.country-search-ajax #csw-pages-items .panel .panel-heading a {
-    color: white;
-}
-
-.country-search-ajax #csw-pages-items .panel {
-    background-color: #f9f9f9;
-}
-
-.country-search-ajax #csw-pages-items .panel-heading + .panel-heading {
-    background-color: rgba(40, 174, 231, 0.75);
-    font-size: 13px;
-}
-
-.country-search-ajax #csw-pages-items {
-
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display:         flex;
-    flex-wrap: wrap;
-
-}
-
-.country-search-ajax #csw-pages-items > [class*='col-'] {
-    display: flex;
-    flex-direction: column;
-}
-
-.country-search-ajax #csw-pages-items .panel .panel-heading i {
-    color: white;
-    font-size: 12px;
-    position: relative;
-    top: 4px;
-    padding-right: 4px;
-}
-
+/*
 span.csw-count {
     padding: 2px 4px;
     color: #64bb5d;
@@ -223,4 +215,150 @@ span.csw-count {
     font-weight: 300;
     background-color: rgba(255, 255, 255, 0.88);
     border-radius: 2px;
+}*/
+
+.sgs-new-search-result-item {
+    padding-left: 15px;
+    margin-bottom: 15px;
+    display: flex;
+}
+
+@media (max-width: 768px) {
+    .sgs-new-search-result-item {
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+    }
+    .sgs-new-search-result-item .sgs-new-col-left {
+        order: 1;
+    }
+    #settle-geo-search-results-page-new {
+        padding: 0 20px;
+    }
+    .sgs-new-col-bordered {
+        max-width: 100%;
+        width: 100%;
+        margin-top: 15px;
+    }
+}
+
+
+.sgs-new-search-result-item .sgs-new-col-left {
+    border-radius: 20px;
+    text-align: center;
+    min-height: 100px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sgs-new-search-result-item .sgs-new-col-right {
+    border-radius: 20px;
+    padding: 10px 20px;
+    min-height: 100px;
+    background-color: white;
+}
+
+.sgs-new-search-result-item .sgs-new-col-subtitle {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.sgs-new-search-result-item .sgs-new-col-description {
+    border-top: 2px solid rgb(0, 158, 242);
+    margin-left: -20px;
+    margin-right: -20px;
+    padding: 5px 20px 0 20px;
+    max-height: 75px;
+    overflow: hidden;
+}
+
+.sgs-new-search-result-item .sgs-new-userpic {
+
+}
+
+.sgs-new-search-result-item .sgs-new-userpic .sgs-userpic-wrapper {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    border: 2px solid rgb(0, 158, 242);
+    overflow: hidden;
+    display: block;
+}
+
+.sgs-new-search-result-item .sgs-new-userpic .sgs-userpic-wrapper img {
+    width: 100%;
+}
+
+.sgs-new-search-result-item .sgs-new-userpic span {
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.sgs-new-search-result-item .sgs-new-contribs {
+    font-weight: bold;
+    font-size: 15px;
+    padding: 0;
+}
+
+.sgs-new-last-updated {
+    font-size: 14px;
+}
+
+.sgs-new-search-result-item.border-green .sgs-new-col-left,
+.sgs-new-search-result-item.border-green .sgs-new-col-right {
+    border: 2px solid #00a6e3;
+}
+
+.sgs-new-search-result-item:nth-child(odd) .sgs-new-col-left,
+.sgs-new-search-result-item:nth-child(odd) .sgs-new-col-right,
+.sgs-new-search-result-item:nth-child(odd) .sgs-new-userpic .sgs-userpic-wrapper {
+    border: 2px solid #00a6e3;
+}
+
+.sgs-new-col-title {
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 18px;
+    color: black;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.sgs-new-col-title a {
+    color: black;
+    text-decoration: none;
+}
+
+.csw-right-title {
+    max-width: 400px;
+    margin: 0 auto 40px auto;
+}
+
+.csw-right-title .csw-right-title-wrapper {
+    width: 100%;
+    text-align: center;
+    overflow: visible;
+    height: 4px;
+    border-radius: 4px;
+    background: #ffcc05;
+    background: -moz-linear-gradient(left,#ffcc05 0%,#49b86a 50%,#ffcc05 100%);
+    background: -webkit-linear-gradient(left,#ffcc05 0%,#49b86a 50%,#ffcc05 100%);
+    background: linear-gradient(to right,#ffcc05 0%,#49b86a 50%,#ffcc05 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffcc05',endColorstr='#ffcc05',GradientType=1);
+    margin-bottom: 45px;
+}
+
+.csw-right-title .csw-right-title-wrapper span {
+    display: inline-block;
+    margin: 0 auto;
+    background-color: #00a6e3;
+    padding: 0 15px;
+    font-size: 30px;
+    font-weight: 500;
+    position: relative;
+    top: -25px;
+    color: white;
 }

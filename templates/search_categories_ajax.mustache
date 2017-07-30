@@ -1,31 +1,58 @@
+<div class="row" id="double-wrapper">
+<div id="double-col-left">
 <div id="country-search-wrapper" class="country-search-ajax" data-country-id="{{ country }}">
 
-    <ol class="breadcrumb">
-        {{# breads }}
-            {{# active }}
-                <li class="active">
-                    {{ title }}
-                </li>
-            {{/active}}
-            {{^ active }}
-                <li>
-                    <a href="{{ link }}">{{ title }}</a>
-                </li>
-            {{/active}}
+	<div class="wrapper-col">
 
-        {{/ breads }}
-    </ol>
+		<h1>Categories</h1>
 
-    <div class="row" id="csw-items">
-        <div class="col-md-12"> Loading categories .. </div>
-    </div>
+	    <ol class="breadcrumb">
+	        {{# breads }}
+	            {{# active }}
+	                <li class="active">
+	                    {{ title }}
+	                </li>
+	            {{/active}}
+	            {{^ active }}
+	                <li>
+	                    <a href="{{ link }}">{{ title }}</a>
+	                </li>
+	            {{/active}}
 
-    <div class="row" id="csw-sub-items">
+	        {{/ breads }}
+	    </ol>
 
-    </div>
 
-    <div class="row" id="csw-pages-items">
+		<div class="row" id="csw-items">
+			<div class="col-md-12"> Loading categories .. </div>
+		</div>
 
-    </div>
+		<div class="row" id="csw-sub-items">
+
+		</div>
+
+		<div class="csw-back">< BACK</div>
+
+	</div>
+
+</div>
+
+</div>
+
+	<div class="col-md-6 col-md-offset-6" id="double-col-right">
+		<div class="wrapper-col">
+
+			<div class="csw-right-title">
+				<div class="csw-right-title-wrapper">
+					<span>Results</span>
+				</div>
+			</div>
+
+			<div class="row" id="csw-pages-items">
+
+			</div>
+
+		</div>
+	</div>
 
 </div>
