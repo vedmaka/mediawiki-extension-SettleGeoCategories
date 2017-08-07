@@ -167,6 +167,10 @@
     cursor: default;
 }
 
+.country-search-ajax #csw-items .csw-category-item.csw-active .csw-count {
+    display: none;
+}
+
 .country-search-ajax #csw-items .csw-category-item i {
     margin-right: 2px;
 }
