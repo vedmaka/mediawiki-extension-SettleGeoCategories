@@ -160,6 +160,8 @@ class SettleGeoCategories
 			$car[$cid] = $cat;
 		}
 
+		$car = array_reverse($car);
+
 		$html = '<ol class="breadcrumb card-categories-list">';
 		/**
 		 * @var int $cK
