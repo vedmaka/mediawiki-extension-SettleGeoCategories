@@ -163,6 +163,9 @@ class SettleGeoCategories
 		$car = array_reverse($car);
 
 		$html = '<ol class="breadcrumb card-categories-list">';
+
+		$categoriesHtml = array();
+
 		/**
 		 * @var int $cK
 		 * @var SettleGeoCategory $cV
@@ -173,16 +176,21 @@ class SettleGeoCategories
 
 			if( $cV->getParentId() === null ) {
 				// This is the top level category
-				$html .= $parser->insertStripItem( '<li><a href="'.$catLink.'/'.$cK.'">'.$cV->getTitleKey().'</a></li>' );
+				$categoriesHtml[] = $parser->insertStripItem( '<li><a href="'.$catLink.'/'.$cK.'">'.$cV->getTitleKey().'</a></li>' );
 			}else{
 				// This is child category
-				$html .= $parser->insertStripItem( '<li><a href="'.$catLink.'/'.$cK.'">'.$cV->getTitleKey().'</a></li>' );
+				$categoriesHtml[] = $parser->insertStripItem( '<li><a href="'.$catLink.'/'.$cK.'">'.$cV->getTitleKey().'</a></li>' );
 				//TODO: refactor this, right now it support only 2 level hierarchy
 				$pCat = new SettleGeoCategory( $cV->getParentId() );
 				if( $pCat ) {
-					$html .= $parser->insertStripItem( '<li><a href="'.$catLink.'/'.$pCat->getId().'">'.$pCat->getTitleKey().'</a></li>' );
+					$categoriesHtml[] = $parser->insertStripItem( '<li><a href="'.$catLink.'/'.$pCat->getId().'">'.$pCat->getTitleKey().'</a></li>' );
 				}
 			}
+		}
+
+		$categoriesHtml = array_reverse($categoriesHtml);
+		foreach ($categoriesHtml as $h) {
+			$html .= $h;
 		}
 
 		$html .= '</ol>';
